@@ -45,7 +45,7 @@ public protocol BarChartDataSource: class {
 
 public protocol BarChartDelegate: class {
     /// Informs the delegate the the item at the specified index was selected
-    func barChart(_ barChart: BarChart, didSelectItemAt index: Int);
+    func barChart(_ barChart: BarChart, didSelectItemAt index: Int?);
 }
 
 public extension BarChartDataSource {
@@ -95,7 +95,7 @@ public extension BarChartDataSource {
 }
 
 public extension BarChartDelegate {
-    func barChart(_ barChart: BarChart, didSelectItemAt index: Int) {
+    func barChart(_ barChart: BarChart, didSelectItemAt index: Int?) {
     };
 }
 
@@ -613,6 +613,6 @@ public class BarChart: UIView, UICollectionViewDataSource , UICollectionViewDele
     
     @objc private func tapGestureRecognizer_Tap(sender: UITapGestureRecognizer) {
         // Inform the delegate that the tooltip was tapped
-        delegate?.barChart(self, didSelectItemAt: indexPathSelected?.row ?? 0);
+        delegate?.barChart(self, didSelectItemAt: indexPathSelected?.row ?? nil);
     }
 }

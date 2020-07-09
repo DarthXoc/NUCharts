@@ -63,8 +63,13 @@ class BarChartViewController: UIViewController, BarChartDataSource, BarChartDele
     // MARK: - Bar Chart
     
     func barChart(_ barChart: BarChart, didSelectItemAt index: Int) {
+        // Check to make sure that index is not nil
+        guard let intIndex: Int = index else {
+            return
+        }
+        
         // Setup an alert controller
-        let alertController: UIAlertController = UIAlertController(title: "Tooltip Tapped", message: "Index: \(index)\rValue: \(arrayPayload?[index] ?? 0)", preferredStyle: .alert);
+        let alertController: UIAlertController = UIAlertController(title: "Tooltip Tapped", message: "Index: \(intIndex)\rValue: \(arrayPayload?[intIndex] ?? 0)", preferredStyle: .alert);
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
         
         // Present the alert controller
