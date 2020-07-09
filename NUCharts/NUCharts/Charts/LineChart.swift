@@ -45,7 +45,7 @@ public protocol LineChartDataSource: class {
 
 public protocol LineChartDelegate: class {
     /// Informs the delegate the the item at the specified index was selected
-    func lineChart(_ lineChart: LineChart, didSelectItemAt index: Int);
+    func lineChart(_ lineChart: LineChart, didSelectItemAt index: Int?);
 }
 
 public extension LineChartDataSource {
@@ -95,7 +95,7 @@ public extension LineChartDataSource {
 }
 
 public extension LineChartDelegate {
-    func lineChart(_ lineChart: LineChart, didSelectItemAt index: Int) {
+    func lineChart(_ lineChart: LineChart, didSelectItemAt index: Int?) {
     };
 }
 
@@ -826,6 +826,6 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
     
     @objc private func tapGestureRecognizer_Tap(sender: UITapGestureRecognizer) {
         // Inform the delegate that the tooltip was tapped
-        delegate?.lineChart(self, didSelectItemAt: indexPathSelected?.row ?? 0);
+        delegate?.lineChart(self, didSelectItemAt: indexPathSelected?.row ?? nil);
     }
 }

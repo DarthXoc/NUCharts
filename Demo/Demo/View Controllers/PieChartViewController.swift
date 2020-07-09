@@ -1,5 +1,5 @@
 //
-//  HalfPieChartViewController.swift
+//  PieChartViewController.swift
 //  Demo
 //
 //  Created by Jason Cox on 6/11/20.
@@ -8,7 +8,7 @@
 
 import UIKit;
 
-class HalfPieChartViewController: UIViewController {
+class PieChartViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad();
