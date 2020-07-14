@@ -20,6 +20,12 @@ public class ChartCore {
         case solid;
     }
     
+    /// Pie types
+    public enum PieType {
+        case full;
+        case half;
+    }
+    
     /// Text drawing direction
     internal enum TextDrawingDirection {
         case bottomToTop;
@@ -46,7 +52,7 @@ public class ChartCore {
     /// Properties used in the drawing of borders
     public struct Border {
         /// The border's color
-        public var color: UIColor = .opaqueSeparator;
+        public var color: UIColor? = .opaqueSeparator;
         
         /// The border's width
         public var width: CGFloat = 0.33;
@@ -314,16 +320,20 @@ public class ChartCore {
     
     /// Finds the maximum value in the payload
     internal static func payloadMax(for arrayPayload: [Double]?) -> Double {
+        // FIXME: This is the source of the slow down for extremely large (100,000+ item) datasource
+        
         // Find the max value in the payload
-        let doubleMaxValue: Double = arrayPayload?.map({ $0 }).max() ?? 0;
+        let doubleMaxValue: Double = arrayPayload?.max() ?? 0;
         
         return doubleMaxValue;
     }
     
     /// Finds the minimum value in the payload
     internal static func payloadMin(for arrayPayload: [Double]?) -> Double {
+        // FIXME: This is the source of the slow down for extremely large (100,000+ item) datasource
+        
         // Find the min value in the payload
-        let doubleMinValue: Double = arrayPayload?.map({ $0 }).min() ?? 0;
+        let doubleMinValue: Double = arrayPayload?.min() ?? 0;
         
         return doubleMinValue;
     }
@@ -534,6 +544,74 @@ public class ChartCore {
 
         // Add the layer to the view
         view?.layer.addSublayer(layer);
+    }
+    
+    /// Draws a slice of a pie
+    @discardableResult internal static func drawSlice(from pointCenter: CGPoint, radius floatRadius: CGFloat, donutRadius floatDonutRadius: CGFloat = .zero, angleStart floatAngleStart: CGFloat, angleEnd floatAngleEnd: CGFloat, borderColor colorBorder: UIColor? = nil, borderWidth floatBorderWidth: CGFloat? = nil, fillColor colorFill: UIColor, for pieType: PieType, in view: UIView?) -> CGPath {
+        
+        // MARK: Draw pie slice's background
+        
+        // Create a mutable path
+        let path: CGMutablePath = CGMutablePath();
+        
+        // Add the slice
+        path.addArc(center: pointCenter,
+                    radius: floatRadius,
+                    startAngle: CGFloat.pi * (floatAngleStart / 180),
+                    endAngle: CGFloat.pi * (floatAngleEnd / 180),
+                    clockwise: false);
+        
+        // Add the donut hole (if not specified, a point will be drawn to the center of the pie)
+        path.addArc(center: pointCenter,
+                    radius: floatDonutRadius,
+                    startAngle: CGFloat.pi * (floatAngleEnd / 180),
+                    endAngle: CGFloat.pi * (floatAngleStart / 180),
+                    clockwise: true);
+        
+        // Close the path
+        path.closeSubpath();
+        
+        // Configure the CAShapeLayer
+        let layer: CAShapeLayer = CAShapeLayer();
+        layer.path = path;
+        layer.fillColor = colorFill.cgColor;
+        
+        // Add the layer to the view
+        view?.layer.addSublayer(layer);
+        
+        // MARK: Draw pie slice's border
+        
+        // Create a mutable path
+        let pathBorder: CGMutablePath = CGMutablePath();
+
+        // Add the slice
+        pathBorder.addArc(center: pointCenter,
+                          radius: floatRadius - (((floatBorderWidth ?? 1.0) / 2) - 0.33),
+                          startAngle: CGFloat.pi * (floatAngleStart / 180),
+                          endAngle: CGFloat.pi * (floatAngleEnd / 180),
+                          clockwise: false);
+
+        // Add the donut hole (if not specified, a point will be drawn to the center of the pie)
+        pathBorder.addArc(center: pointCenter,
+                          radius: floatDonutRadius + (((floatBorderWidth ?? 1.0) / 2) - 0.33),
+                          startAngle: CGFloat.pi * (floatAngleEnd / 180),
+                          endAngle: CGFloat.pi * (floatAngleStart / 180),
+                          clockwise: true);
+
+        // Close the path
+        pathBorder.closeSubpath();
+        
+        // Configure the CAShapeLayer
+        let layerBorder: CAShapeLayer = CAShapeLayer();
+        layerBorder.path = pathBorder;
+        layerBorder.fillColor = UIColor.clear.cgColor;
+        layerBorder.lineWidth = floatBorderWidth ?? 1.0;
+        layerBorder.strokeColor = colorBorder?.cgColor ?? colorFill.cgColor;
+        
+        // Add the layer to the view
+        view?.layer.addSublayer(layerBorder);
+        
+        return path;
     }
     
     /// Draws text at the specified point
@@ -759,7 +837,7 @@ public class ChartCore {
         layerTooltip.path = pathTooltip;
         layerTooltip.fillColor = tooltipSettings.backgroundColor.cgColor;
         layerTooltip.lineWidth = tooltipSettings.border.width;
-        layerTooltip.strokeColor = tooltipSettings.border.color.cgColor;
+        layerTooltip.strokeColor = tooltipSettings.border.color?.cgColor ?? UIColor.clear.cgColor;
         
         // Add the layer to the view
         view?.layer.addSublayer(layerTooltip);

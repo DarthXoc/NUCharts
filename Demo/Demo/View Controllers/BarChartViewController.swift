@@ -45,7 +45,7 @@ class BarChartViewController: UIViewController, BarChartDataSource, BarChartDele
                                                      maxValue: Double(textFieldMaxValue!.text!) ?? 0,
                                                      minValue: Double(textFieldMinValue!.text!) ?? 0,
                                                      valueType: segmentedControlValueType?.selectedSegmentIndex == 0 ? .integer : .double);
-        
+                
         // Draw the chart
         barChart?.draw();
     }
@@ -106,10 +106,6 @@ class BarChartViewController: UIViewController, BarChartDataSource, BarChartDele
     
 //    func barChart(_ barChart: BarChart, tooltipTitleForItemAt index: Int) -> String {
 //        return String("Item \(index)");
-//    }
-    
-//    func barChart(_ barChart: BarChart, valueForItemAt index: Int) -> Double {
-//        return arrayPayload?[index] ?? 0;
 //    }
     
 //    func numberOfItems(in barChart: BarChart) -> Int {

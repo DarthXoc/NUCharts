@@ -202,6 +202,9 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
     
     // MARK: - Variables
     
+    /// An array of values which will be drawn on the chart
+    private var arrayValues: [Double] = [];
+    
     /// The currently selected index path
     private var indexPathSelected: IndexPath?;
     
@@ -247,21 +250,21 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
     /// Calculates the location of the specified point on the y-axis when drawing an individual line segment
     private func calculateSegmentLocationY(for cell: UICollectionViewCell, in collectionView: UICollectionView, location segmentLocation: SegmentLocation, at indexPath: IndexPath) -> CGFloat {
         // Calculate the location of the zero axis
-        let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: cell, with: dataSource!.values(for: self));
+        let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: cell, with: arrayValues);
         
         // Calculate the location of the current point
-        let floatLocationYCurrent: CGFloat = ChartCore.calculatePointLocationY(in: collectionView, with: dataSource!.values(for: self), at: indexPath);
+        let floatLocationYCurrent: CGFloat = ChartCore.calculatePointLocationY(in: collectionView, with: arrayValues, at: indexPath);
         
         // Check to see which point is being requested
         if (segmentLocation == .current) {
             return floatZeroAxis - floatLocationYCurrent;
         } else if (segmentLocation == .next || segmentLocation == .nextMid) {
             // Check to see if any special circumstances are present
-            if (indexPath.row == (dataSource!.numberOfItems(in: self) - 1)) {
+            if (indexPath.row == (arrayValues.count - 1)) {
                 return floatZeroAxis - floatLocationYCurrent;
             } else {
                 // Calculate the location of the next point
-                let floatPointPositionYNext: CGFloat = ChartCore.calculatePointLocationY(in: collectionView, with: dataSource!.values(for: self), at: IndexPath(row: indexPath.row + 1, section: 0));
+                let floatPointPositionYNext: CGFloat = ChartCore.calculatePointLocationY(in: collectionView, with: arrayValues, at: IndexPath(row: indexPath.row + 1, section: 0));
                 
                 if (segmentLocation == .next) {
                     return floatZeroAxis - floatPointPositionYNext;
@@ -278,7 +281,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
                 return floatZeroAxis - floatLocationYCurrent;
             } else {
                 // Calculate the location of the previous point
-                let floatPointPositionYPrevious: CGFloat = ChartCore.calculatePointLocationY(in: collectionView, with: dataSource!.values(for: self), at: IndexPath(row: indexPath.row - 1, section: 0));
+                let floatPointPositionYPrevious: CGFloat = ChartCore.calculatePointLocationY(in: collectionView, with: arrayValues, at: IndexPath(row: indexPath.row - 1, section: 0));
                 
                 if (segmentLocation == .previous) {
                     return floatZeroAxis - floatPointPositionYPrevious;
@@ -327,8 +330,14 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         // Remove the background color
         self.backgroundColor = .clear;
         
+        // Clip the subviews
+        self.clipsToBounds = true;
+        
         // Remove all subviews
         self.subviews.forEach({ $0.removeFromSuperview(); });
+        
+        // Cache the array of values to a local variable
+        arrayValues = dataSource!.values(for: self);
         
         // Configure the UICollectionViewFlowLayout
         let collectionViewFlowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout();
@@ -350,7 +359,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         collectionView.backgroundColor = self.settings.backgroundColor;
         collectionView.contentInset = self.settings.padding;
         collectionView.layer.cornerRadius = self.settings.cornerRadius;
-        collectionView.layer.borderColor = self.settings.border.color.cgColor;
+        collectionView.layer.borderColor = self.settings.border.color?.cgColor ?? UIColor.clear.cgColor;
         collectionView.layer.borderWidth = self.settings.border.width;
         
         // Reload the collection view
@@ -407,7 +416,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         // Check to see if the grid should be drawn
         if (dataSource?.lineChart(self, axisXGridLineActiveForItemAt: indexPath.row) ?? self.settings.gridX.active) {
             // Calculate the location of the zero axis
-            let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: cell, with: dataSource!.values(for: self));
+            let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: cell, with: arrayValues);
             
             // Draw a grid line (above the zero axis)
             ChartCore.drawLine(from: CGPoint(x: 0, y: floatZeroAxis),
@@ -439,7 +448,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
             var floatLocationX: CGFloat = self.settings.padding.left;
             
             // Calculate the location of the zero axis
-            let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: collectionView, with: dataSource!.values(for: self)) + self.settings.padding.top;
+            let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: collectionView, with: arrayValues) + self.settings.padding.top;
             
             // Loop through drawing the grid on the collection view's background view
             repeat {
@@ -483,10 +492,10 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         // Check to see if the grid should be drawn
         if (self.settings.gridY.active) {
             // Calculate the location of the zero axis
-            let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: collectionView, with: dataSource!.values(for: self)) + self.settings.padding.top;
+            let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: collectionView, with: arrayValues) + self.settings.padding.top;
 
             // Calculate the incriment
-            let floatIncriment: CGFloat = ChartCore.calculateIncriment(in: collectionView, with: dataSource!.values(for: self));
+            let floatIncriment: CGFloat = ChartCore.calculateIncriment(in: collectionView, with: arrayValues);
             
             // Set floatYLocation to the zero axis
             var floatYLocation: CGFloat = floatZeroAxis;
@@ -527,7 +536,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
     /// Draws the line segment for the specified cell
     private func drawLineSegment(for cell: UICollectionViewCell, in collectionView: UICollectionView, at indexPath: IndexPath) {
         // Calculate the location of the zero axis
-        let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: cell, with: dataSource!.values(for: self));
+        let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: cell, with: arrayValues);
         
         // Calculate the location of the current point
         let floatLocationYCurrent: CGFloat = self.calculateSegmentLocationY(for: cell,
@@ -633,11 +642,11 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
     /// Draws the point for the specified cell
     private func drawPoint(for cell: UICollectionViewCell, in collectionView: UICollectionView, at indexPath: IndexPath, selected boolSelected: Bool) {
         // Calculate the location of the zero axis
-        let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: cell, with: dataSource!.values(for: self));
+        let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: cell, with: arrayValues);
         
         // Calculate the location of the point on the Y-Axis
         let floatLocationY: CGFloat = ChartCore.calculatePointLocationY(in: collectionView,
-                                                                        with: dataSource!.values(for: self),
+                                                                        with: arrayValues,
                                                                         at: indexPath);
         
         // Determine what border color should be used
@@ -670,11 +679,11 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         // Check to see if the selected index path is the current index path
         if (indexPathSelected == indexPath) {
             // Calculate the location of the zero axis
-            let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: cell, with: dataSource!.values(for: self));
+            let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: cell, with: arrayValues);
 
             // Calculate the location of the point on the Y-Axis
             let floatLocationY: CGFloat = ChartCore.calculatePointLocationY(in: collectionView,
-                                                                            with: dataSource!.values(for: self),
+                                                                            with: arrayValues,
                                                                             at: indexPath);
             
             // Setup an array to house tooltip direction attributes
@@ -693,7 +702,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
             if (indexPath.row == 0) {
                 // Draw the tooltip to the right
                 arrayTooltipDirection.append(.right);
-            } else if (indexPath.row == (dataSource!.numberOfItems(in: self) - 1)) {
+            } else if (indexPath.row == (arrayValues.count - 1)) {
                 // Draw the tooltip to the left
                 arrayTooltipDirection.append(.left);
             }
@@ -734,7 +743,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         // Check to see if the zero axis should be drawn
         if (self.settings.gridYAxis.active) {
             // Calculate the location of the zero axis
-            let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: object, with: dataSource!.values(for: self)) + floatPaddingTop;
+            let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: object, with: arrayValues) + floatPaddingTop;
             
             // Draw a grid line
             ChartCore.drawLine(from: CGPoint(x: 0, y: floatZeroAxis),
@@ -774,7 +783,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         self.drawPoint(for: cell, in: collectionView, at: indexPath, selected: indexPath == indexPathSelected)
 
         // Draw the tooltip
-        self.drawTooltip(for: cell, in: collectionView, at: indexPath)
+        self.drawTooltip(for: cell, in: collectionView, at: indexPath);
         
         return cell;
     }
@@ -819,7 +828,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource!.numberOfItems(in: self);
+        return arrayValues.count;
     }
     
     // MARK: - UITapGestureRecognizer

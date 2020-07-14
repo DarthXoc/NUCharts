@@ -15,7 +15,7 @@
 		96D256972492D2C1005E0AC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96D256962492D2C1005E0AC2 /* Assets.xcassets */; };
 		96D2569A2492D2C1005E0AC2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96D256982492D2C1005E0AC2 /* LaunchScreen.storyboard */; };
 		96D256AE2492D36D005E0AC2 /* BarChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256AD2492D36D005E0AC2 /* BarChartViewController.swift */; };
-		96D256B02492D374005E0AC2 /* HalfPieChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256AF2492D374005E0AC2 /* HalfPieChartViewController.swift */; };
+		96D256B02492D374005E0AC2 /* PieChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256AF2492D374005E0AC2 /* PieChartViewController.swift */; };
 		96D256B22492D37C005E0AC2 /* LineChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256B12492D37C005E0AC2 /* LineChartViewController.swift */; };
 		96D256C22492D90D005E0AC2 /* UITextField+Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256C02492D90D005E0AC2 /* UITextField+Icons.swift */; };
 		96D256C32492D90D005E0AC2 /* UIButton+Flat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256C12492D90D005E0AC2 /* UIButton+Flat.swift */; };
@@ -45,7 +45,7 @@
 		96D256992492D2C1005E0AC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		96D2569B2492D2C1005E0AC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		96D256AD2492D36D005E0AC2 /* BarChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartViewController.swift; sourceTree = "<group>"; };
-		96D256AF2492D374005E0AC2 /* HalfPieChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfPieChartViewController.swift; sourceTree = "<group>"; };
+		96D256AF2492D374005E0AC2 /* PieChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartViewController.swift; sourceTree = "<group>"; };
 		96D256B12492D37C005E0AC2 /* LineChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartViewController.swift; sourceTree = "<group>"; };
 		96D256B42492D3F0005E0AC2 /* NUCharts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NUCharts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		96D256C02492D90D005E0AC2 /* UITextField+Icons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+Icons.swift"; sourceTree = "<group>"; };
@@ -108,8 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				96D256AD2492D36D005E0AC2 /* BarChartViewController.swift */,
-				96D256AF2492D374005E0AC2 /* HalfPieChartViewController.swift */,
 				96D256B12492D37C005E0AC2 /* LineChartViewController.swift */,
+				96D256AF2492D374005E0AC2 /* PieChartViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -207,7 +207,7 @@
 				96D256C22492D90D005E0AC2 /* UITextField+Icons.swift in Sources */,
 				96D2568E2492D2C0005E0AC2 /* AppDelegate.swift in Sources */,
 				96D256902492D2C0005E0AC2 /* SceneDelegate.swift in Sources */,
-				96D256B02492D374005E0AC2 /* HalfPieChartViewController.swift in Sources */,
+				96D256B02492D374005E0AC2 /* PieChartViewController.swift in Sources */,
 				96D256AE2492D36D005E0AC2 /* BarChartViewController.swift in Sources */,
 				96D256B22492D37C005E0AC2 /* LineChartViewController.swift in Sources */,
 				96D256C32492D90D005E0AC2 /* UIButton+Flat.swift in Sources */,

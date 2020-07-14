@@ -108,10 +108,6 @@ class LineChartViewController: UIViewController, LineChartDataSource, LineChartD
 //        return String("Item \(index)");
 //    };
     
-//    func lineChart(_ lineChart: LineChart, valueForItemAt index: Int) -> Double {
-//        return arrayPayload?[index] ?? 0;
-//    };
-    
 //    func numberOfItems(in lineChart: LineChart) -> Int {
 //        return arrayPayload?.count ?? 0;
 //    }

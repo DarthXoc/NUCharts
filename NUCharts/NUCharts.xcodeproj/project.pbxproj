@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		964AEC5724B6CCC300F787E1 /* PieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964AEC5624B6CCC300F787E1 /* PieChart.swift */; };
+		964AEC5A24BA1E5D00F787E1 /* CGRect+Center.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964AEC5924BA1E5D00F787E1 /* CGRect+Center.swift */; };
+		964AEC5C24BB9F3C00F787E1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964AEC5B24BB9F3C00F787E1 /* Mocks.swift */; };
 		96AD6D3A2499616C00A09DAF /* NUCharts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D256762492D2A7005E0AC2 /* NUCharts.framework */; };
 		96AD6D412499624E00A09DAF /* ChartCoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AD6D402499624E00A09DAF /* ChartCoreTest.swift */; };
 		96D2567B2492D2A7005E0AC2 /* NUCharts.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D256792492D2A7005E0AC2 /* NUCharts.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96D256A22492D2DA005E0AC2 /* ChartCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256A12492D2DA005E0AC2 /* ChartCore.swift */; };
 		96D256A62492D2FD005E0AC2 /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256A52492D2FD005E0AC2 /* BarChart.swift */; };
-		96D256A82492D308005E0AC2 /* HalfPieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256A72492D308005E0AC2 /* HalfPieChart.swift */; };
 		96D256AA2492D30F005E0AC2 /* LineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256A92492D30F005E0AC2 /* LineChart.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +29,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		964AEC5624B6CCC300F787E1 /* PieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChart.swift; sourceTree = "<group>"; };
+		964AEC5924BA1E5D00F787E1 /* CGRect+Center.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Center.swift"; sourceTree = "<group>"; };
+		964AEC5B24BB9F3C00F787E1 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		96AD6D352499616C00A09DAF /* NUChartsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NUChartsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		96AD6D392499616C00A09DAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		96AD6D402499624E00A09DAF /* ChartCoreTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartCoreTest.swift; sourceTree = "<group>"; };
@@ -35,7 +40,6 @@
 		96D2567A2492D2A7005E0AC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		96D256A12492D2DA005E0AC2 /* ChartCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartCore.swift; sourceTree = "<group>"; };
 		96D256A52492D2FD005E0AC2 /* BarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChart.swift; sourceTree = "<group>"; };
-		96D256A72492D308005E0AC2 /* HalfPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfPieChart.swift; sourceTree = "<group>"; };
 		96D256A92492D30F005E0AC2 /* LineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChart.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,11 +62,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		964AEC5824BA1E4900F787E1 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				964AEC5924BA1E5D00F787E1 /* CGRect+Center.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		96AD6D362499616C00A09DAF /* NUChartsTests */ = {
 			isa = PBXGroup;
 			children = (
 				96AD6D402499624E00A09DAF /* ChartCoreTest.swift */,
 				96AD6D392499616C00A09DAF /* Info.plist */,
+				964AEC5B24BB9F3C00F787E1 /* Mocks.swift */,
 			);
 			path = NUChartsTests;
 			sourceTree = "<group>";
@@ -90,6 +103,7 @@
 			children = (
 				96D256A12492D2DA005E0AC2 /* ChartCore.swift */,
 				96D256A32492D2E7005E0AC2 /* Charts */,
+				964AEC5824BA1E4900F787E1 /* Extensions */,
 				96D2567A2492D2A7005E0AC2 /* Info.plist */,
 				96D256792492D2A7005E0AC2 /* NUCharts.h */,
 			);
@@ -100,8 +114,8 @@
 			isa = PBXGroup;
 			children = (
 				96D256A52492D2FD005E0AC2 /* BarChart.swift */,
-				96D256A72492D308005E0AC2 /* HalfPieChart.swift */,
 				96D256A92492D30F005E0AC2 /* LineChart.swift */,
+				964AEC5624B6CCC300F787E1 /* PieChart.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -217,6 +231,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96AD6D412499624E00A09DAF /* ChartCoreTest.swift in Sources */,
+				964AEC5C24BB9F3C00F787E1 /* Mocks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,8 +239,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				964AEC5A24BA1E5D00F787E1 /* CGRect+Center.swift in Sources */,
 				96D256AA2492D30F005E0AC2 /* LineChart.swift in Sources */,
-				96D256A82492D308005E0AC2 /* HalfPieChart.swift in Sources */,
+				964AEC5724B6CCC300F787E1 /* PieChart.swift in Sources */,
 				96D256A62492D2FD005E0AC2 /* BarChart.swift in Sources */,
 				96D256A22492D2DA005E0AC2 /* ChartCore.swift in Sources */,
 			);

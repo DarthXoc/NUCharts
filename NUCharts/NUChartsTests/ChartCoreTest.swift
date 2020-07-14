@@ -11,48 +11,26 @@ import XCTest
 
 class ChartCoreTests: XCTestCase {
     
-    // MARK: - chartCore.calculateInterval
-    
-    /// Test from 0 to positive 10
-    func test_CalculateInterval_0_to_10() throws {
+    /// Tests `blendColors` in ChartCore
+    func test_blendColors() throws {
         // Execute the test
-        let floatResponse: CGFloat = ChartCore.calculateInterval(maxValue: 10, minValue: 0);
+        let colorResponse: UIColor = ChartCore.blendColors(colors: [.white, .black]);
         
         // The expected value
-        let floatExpected: CGFloat = 1;
+        let colorExpected: UIColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0);
         
         // Return the test result
-        XCTAssert(floatResponse == floatExpected, "Expected \(floatExpected), got \(floatResponse)");
+        XCTAssert(colorResponse == colorExpected, "Expected \(colorExpected), got \(colorResponse)");
     }
     
-    /// Test from 0 to positive 25
-    func test_CalculateInterval_0_to_25() throws {
+    /// Tests `calculateIncriment` in ChartCore
+    func test_calculateIncriment() throws {
+        // Create an array of mock values
+        let arrayValues: [Double]? = Mocks.arrayOfValues_100_50_0_50_100();
+        
         // Execute the test
-        let floatResponse: CGFloat = ChartCore.calculateInterval(maxValue: 25, minValue: 0);
-        
-        // The expected value
-        let floatExpected: CGFloat = 5;
-        
-        // Return the test result
-        XCTAssert(floatResponse == floatExpected, "Expected \(floatExpected), got \(floatResponse)");
-    }
-    
-    /// Test from 0 to positive 50
-    func test_CalculateInterval_0_to_50() throws {
-        // Execute the test
-        let floatResponse: CGFloat = ChartCore.calculateInterval(maxValue: 50, minValue: 0);
-        
-        // The expected value
-        let floatExpected: CGFloat = 10;
-        
-        // Return the test result
-        XCTAssert(floatResponse == floatExpected, "Expected \(floatExpected), got \(floatResponse)");
-    }
-    
-    /// Test from 0 to positive 100
-    func test_CalculateInterval_0_to_100() throws {
-        // Execute the test
-        let floatResponse: CGFloat = ChartCore.calculateInterval(maxValue: 100, minValue: 0);
+        let floatResponse: CGFloat = ChartCore.calculateIncriment(in: Mocks.collectionView(),
+                                                                  with: arrayValues);
         
         // The expected value
         let floatExpected: CGFloat = 25;
@@ -61,32 +39,8 @@ class ChartCoreTests: XCTestCase {
         XCTAssert(floatResponse == floatExpected, "Expected \(floatExpected), got \(floatResponse)");
     }
     
-    /// Test from 0 to positive 250
-    func test_CalculateInterval_0_to_250() throws {
-        // Execute the test
-        let floatResponse: CGFloat = ChartCore.calculateInterval(maxValue: 250, minValue: 0);
-        
-        // The expected value
-        let floatExpected: CGFloat = 50;
-        
-        // Return the test result
-        XCTAssert(floatResponse == floatExpected, "Expected \(floatExpected), got \(floatResponse)");
-    }
-    
-    /// Test from 0 to positive 500
-    func test_CalculateInterval_0_to_500() throws {
-        // Execute the test
-        let floatResponse: CGFloat = ChartCore.calculateInterval(maxValue: 500, minValue: 0);
-        
-        // The expected value
-        let floatExpected: CGFloat = 100;
-        
-        // Return the test result
-        XCTAssert(floatResponse == floatExpected, "Expected \(floatExpected), got \(floatResponse)");
-    }
-    
-    /// Test from 0 to positive 1000
-    func test_CalculateInterval_0_to_1000() throws {
+    /// Tests `calculateInterval` in ChartCore
+    func test_calculateInterval() throws {
         // Execute the test
         let floatResponse: CGFloat = ChartCore.calculateInterval(maxValue: 1000, minValue: 0);
         
@@ -96,16 +50,79 @@ class ChartCoreTests: XCTestCase {
         // Return the test result
         XCTAssert(floatResponse == floatExpected, "Expected \(floatExpected), got \(floatResponse)");
     }
-    
-    /// Test from negative 100 to positive 100
-    func test_CalculateInterval_100_100() throws {
+        
+    /// Tests `calculatePointLocationY` in ChartCore
+    func test_calculatePointLocationY() throws {
         // Execute the test
-        let floatResponse: CGFloat = ChartCore.calculateInterval(maxValue: 100, minValue: -100);
+        let floatResponse: CGFloat = ChartCore.calculatePointLocationY(in: Mocks.collectionView(),
+                                                                       with: Mocks.arrayOfValues_100_50_0_50_100(),
+                                                                       at: IndexPath(row: 3, section: 0));
         
         // The expected value
-        let floatExpected: CGFloat = 50;
+        let floatExpected: CGFloat = 25.0;
         
         // Return the test result
         XCTAssert(floatResponse == floatExpected, "Expected \(floatExpected), got \(floatResponse)");
+    }
+        
+    /// Tests `calculateRange:arrayPayload` in ChartCore
+    func test_calculateRangeArray() throws {
+        // Execute the test
+        let doubleResponse: Double = ChartCore.calculateRange(for: Mocks.arrayOfValues_100_50_0_50_100());
+        
+        // The expected value
+        let doubleExpected: Double = 200.0;
+        
+        // Return the test result
+        XCTAssert(doubleResponse == doubleExpected, "Expected \(doubleExpected), got \(doubleResponse)");
+    }
+        
+    /// Tests `calculateRange:maxValue:minValue` in ChartCore
+    func test_calculateRangeValues() throws {
+        // Execute the test
+        let doubleResponse: Double = ChartCore.calculateRange(maxValue: 100, minValue: -100);
+        
+        // The expected value
+        let doubleExpected: Double = 200.0;
+        
+        // Return the test result
+        XCTAssert(doubleResponse == doubleExpected, "Expected \(doubleExpected), got \(doubleResponse)");
+    }
+    
+    /// Tests `calculateZeroAxisLocation` in ChartCore
+    func test_calculateZeroAxisLocation() throws {
+        // Execute the test
+        let floatResponse: CGFloat = ChartCore.calculateZeroAxisLocation(for: Mocks.collectionView(),
+                                                                         with: Mocks.arrayOfValues_100_50_0_50_100());
+        
+        // The expected value
+        let floatExpected: CGFloat = 50.0;
+        
+        // Return the test result
+        XCTAssert(floatResponse == floatExpected, "Expected \(floatExpected), got \(floatResponse)");
+    }
+    
+    /// Tests `payloadMax` in ChartCore
+    func test_payloadMax() throws {
+        // Execute the test
+        let doubleResponse: Double = ChartCore.payloadMax(for: Mocks.arrayOfValues_100_50_0_50_100())
+        
+        // The expected value
+        let doubleExpected: Double = 100.0;
+        
+        // Return the test result
+        XCTAssert(doubleResponse == doubleExpected, "Expected \(doubleExpected), got \(doubleResponse)");
+    }
+    
+    /// Tests `payloadMin` in ChartCore
+    func test_payloadMin() throws {
+        // Execute the test
+        let doubleResponse: Double = ChartCore.payloadMin(for: Mocks.arrayOfValues_100_50_0_50_100())
+        
+        // The expected value
+        let doubleExpected: Double = -100.0;
+        
+        // Return the test result
+        XCTAssert(doubleResponse == doubleExpected, "Expected \(doubleExpected), got \(doubleResponse)");
     }
 }
