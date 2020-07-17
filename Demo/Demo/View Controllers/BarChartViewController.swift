@@ -19,6 +19,7 @@ class BarChartViewController: UIViewController, BarChartDataSource, BarChartDele
     @IBOutlet var textFieldMaxValue: UITextField_Icons?;
     @IBOutlet var textFieldMinValue: UITextField_Icons?;
     @IBOutlet var segmentedControlValueType: UISegmentedControl?;
+    @IBOutlet var switchSectionTitles: UISwitch?;
     
     // MARK: - Variables
     
@@ -92,14 +93,22 @@ class BarChartViewController: UIViewController, BarChartDataSource, BarChartDele
 //        return 3.0;
 //    }
     
-//    func barChart(_ barChart: BarChart, sectionTitleForItemAt index: Int) -> String? {
-//        return "Section";
-//    }
+    func barChart(_ barChart: BarChart, sectionTitleForItemAt index: Int) -> String? {
+        // Check to see if section titles are enabled
+        if (switchSectionTitles?.isOn ?? false) {
+            // Only show section titles every fifth section
+            if (index == 0 || (index + 1).isMultiple(of: 5)) {
+                return "Section";
+            }
+        }
+        
+        return nil;
+    }
     
 //    func barChart(_ barChart: BarChart, sectionTitleColorForItemAt index: Int) -> UIColor? {
 //        return .systemRed;
 //    }
-    
+
 //    func barChart(_ barChart: BarChart, sectionTitleFontForItemAt index: Int) -> UIFont {
 //        return UIFont.preferredFont(forTextStyle: .body);
 //    }

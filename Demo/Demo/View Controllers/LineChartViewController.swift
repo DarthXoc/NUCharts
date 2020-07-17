@@ -19,6 +19,7 @@ class LineChartViewController: UIViewController, LineChartDataSource, LineChartD
     @IBOutlet var textFieldMaxValue: UITextField_Icons?;
     @IBOutlet var textFieldMinValue: UITextField_Icons?;
     @IBOutlet var segmentedControlValueType: UISegmentedControl?;
+    @IBOutlet var switchSectionTitles: UISwitch?;
     
     // MARK: - Variables
     
@@ -92,9 +93,17 @@ class LineChartViewController: UIViewController, LineChartDataSource, LineChartD
 //        return 3.0;
 //    };
     
-//    func lineChart(_ lineChart: LineChart, sectionTitleForItemAt index: Int) -> String? {
-//        return "Section";
-//    };
+    func lineChart(_ lineChart: LineChart, sectionTitleForItemAt index: Int) -> String? {
+        // Check to see if section titles are enabled
+        if (switchSectionTitles?.isOn ?? false) {
+            // Only show section titles every fifth section
+            if (index == 0 || (index + 1).isMultiple(of: 5)) {
+                return "Section";
+            }
+        }
+        
+        return nil;
+    };
     
 //    func lineChart(_ lineChart: LineChart, sectionTitleColorForItemAt index: Int) -> UIColor? {
 //        return .systemRed;
