@@ -43,34 +43,8 @@
                                             <segue destination="8CN-XX-tkZ" kind="show" id="YQy-Mc-bkC"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="pQF-HG-eJa">
-                                        <rect key="frame" x="20" y="99" width="374" height="43.5"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pQF-HG-eJa" id="16T-hX-L2c">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pie Chart" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="747-u9-b4y">
-                                                    <rect key="frame" x="20" y="11" width="315" height="22"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="747-u9-b4y" secondAttribute="trailing" id="2tf-AK-Ugf"/>
-                                                <constraint firstItem="747-u9-b4y" firstAttribute="leading" secondItem="16T-hX-L2c" secondAttribute="leadingMargin" id="SAH-hZ-7Oo"/>
-                                                <constraint firstItem="747-u9-b4y" firstAttribute="top" secondItem="16T-hX-L2c" secondAttribute="topMargin" id="fzC-qE-ROz"/>
-                                                <constraint firstItem="747-u9-b4y" firstAttribute="bottom" secondItem="16T-hX-L2c" secondAttribute="bottomMargin" id="gje-KT-YiR"/>
-                                                <constraint firstItem="747-u9-b4y" firstAttribute="centerY" secondItem="16T-hX-L2c" secondAttribute="centerY" id="uTg-ul-93h"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="Pes-E1-DNn" kind="show" id="855-8p-pvP"/>
-                                        </connections>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="AH2-3k-ZtS">
-                                        <rect key="frame" x="20" y="142.5" width="374" height="43.5"/>
+                                        <rect key="frame" x="20" y="99" width="374" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AH2-3k-ZtS" id="UoF-GO-S3T">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
@@ -93,6 +67,32 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <segue destination="TpY-ED-WBZ" kind="show" id="EWI-mY-8Hz"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="pQF-HG-eJa">
+                                        <rect key="frame" x="20" y="142.5" width="374" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pQF-HG-eJa" id="16T-hX-L2c">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pie Chart" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="747-u9-b4y">
+                                                    <rect key="frame" x="20" y="11" width="315" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="747-u9-b4y" secondAttribute="trailing" id="2tf-AK-Ugf"/>
+                                                <constraint firstItem="747-u9-b4y" firstAttribute="leading" secondItem="16T-hX-L2c" secondAttribute="leadingMargin" id="SAH-hZ-7Oo"/>
+                                                <constraint firstItem="747-u9-b4y" firstAttribute="top" secondItem="16T-hX-L2c" secondAttribute="topMargin" id="fzC-qE-ROz"/>
+                                                <constraint firstItem="747-u9-b4y" firstAttribute="bottom" secondItem="16T-hX-L2c" secondAttribute="bottomMargin" id="gje-KT-YiR"/>
+                                                <constraint firstItem="747-u9-b4y" firstAttribute="centerY" secondItem="16T-hX-L2c" secondAttribute="centerY" id="uTg-ul-93h"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="Pes-E1-DNn" kind="show" id="855-8p-pvP"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
