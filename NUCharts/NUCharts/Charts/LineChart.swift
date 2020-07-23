@@ -603,7 +603,6 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         let floatPaddingAdjustmentLeft: CGFloat = indexPath.row == 0 ? self.settings.padding.left : 0;
         let floatPaddingAdjustmentRight: CGFloat = indexPath.row == (collectionView.numberOfItems(inSection: 0) - 1) ? self.settings.padding.right : 0;
         
-        
         // Calculate all of the points needed to draw the line segments
         let pointPreviousMid: CGPoint = CGPoint(x: .zero - floatPaddingAdjustmentLeft, y: floatLocationYPreviousMid);
         let pointPreviousCrossZeroAxis: CGPoint = CGPoint(x: floatZeroAxisCrossLocationXPrevious, y: floatZeroAxis);
@@ -628,7 +627,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
             // Draw a line segment from the start point to the end point
             ChartCore.drawLine(from: pointPreviousMid,
                                to: pointCurrent,
-                               color: floatLocationYCurrent <= floatZeroAxis ? self.settings.segment.line.positiveColor : self.settings.segment.line.negativeColor,
+                               color: floatLocationYCurrent <= floatZeroAxis && floatLocationYPreviousMid <= floatZeroAxis ? self.settings.segment.line.positiveColor : self.settings.segment.line.negativeColor,
                                width: self.settings.segment.line.width,
                                in: cell.contentView);
         } else {
@@ -652,7 +651,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
             // Draw a line segment from the start point to the end point
             ChartCore.drawLine(from: pointCurrent,
                                to: pointNextMid,
-                               color: floatLocationYCurrent <= floatZeroAxis ? self.settings.segment.line.positiveColor : self.settings.segment.line.negativeColor,
+                               color: floatLocationYCurrent <= floatZeroAxis && floatLocationYNextMid <= floatZeroAxis ? self.settings.segment.line.positiveColor : self.settings.segment.line.negativeColor,
                                width: self.settings.segment.line.width,
                                in: cell.contentView);
         } else {
