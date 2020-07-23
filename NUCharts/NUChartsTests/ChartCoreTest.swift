@@ -30,7 +30,8 @@ class ChartCoreTests: XCTestCase {
         
         // Execute the test
         let floatResponse: CGFloat = ChartCore.calculateIncriment(in: Mocks.collectionView(),
-                                                                  with: arrayValues);
+                                                                  maxValue: arrayValues?.max() ?? .zero,
+                                                                  minValue: arrayValues?.min() ?? .zero);
         
         // The expected value
         let floatExpected: CGFloat = 25;
@@ -53,10 +54,14 @@ class ChartCoreTests: XCTestCase {
         
     /// Tests `calculatePointLocationY` in ChartCore
     func test_calculatePointLocationY() throws {
+        // Create an array of mock values
+        let arrayValues: [Double]? = Mocks.arrayOfValues_100_50_0_50_100();
+        
         // Execute the test
         let floatResponse: CGFloat = ChartCore.calculatePointLocationY(in: Mocks.collectionView(),
-                                                                       with: Mocks.arrayOfValues_100_50_0_50_100(),
-                                                                       at: IndexPath(row: 3, section: 0));
+                                                                       payload: arrayValues?[3] ?? .zero,
+                                                                       maxValue: arrayValues?.max() ?? .zero,
+                                                                       minValue: arrayValues?.min() ?? .zero);
         
         // The expected value
         let floatExpected: CGFloat = 25.0;
@@ -67,8 +72,12 @@ class ChartCoreTests: XCTestCase {
         
     /// Tests `calculateRange:arrayPayload` in ChartCore
     func test_calculateRangeArray() throws {
+        // Create an array of mock values
+        let arrayValues: [Double]? = Mocks.arrayOfValues_100_50_0_50_100();
+        
         // Execute the test
-        let doubleResponse: Double = ChartCore.calculateRange(for: Mocks.arrayOfValues_100_50_0_50_100());
+        let doubleResponse: Double = ChartCore.calculateRange(maxValue: arrayValues?.max() ?? .zero,
+                                                              minValue: arrayValues?.min() ?? .zero);
         
         // The expected value
         let doubleExpected: Double = 200.0;
@@ -91,38 +100,18 @@ class ChartCoreTests: XCTestCase {
     
     /// Tests `calculateZeroAxisLocation` in ChartCore
     func test_calculateZeroAxisLocation() throws {
+        // Create an array of mock values
+        let arrayValues: [Double]? = Mocks.arrayOfValues_100_50_0_50_100();
+        
         // Execute the test
         let floatResponse: CGFloat = ChartCore.calculateZeroAxisLocation(for: Mocks.collectionView(),
-                                                                         with: Mocks.arrayOfValues_100_50_0_50_100());
+                                                                         max: arrayValues?.max() ?? .zero,
+                                                                         min: arrayValues?.min() ?? .zero);
         
         // The expected value
         let floatExpected: CGFloat = 50.0;
         
         // Return the test result
         XCTAssert(floatResponse == floatExpected, "Expected \(floatExpected), got \(floatResponse)");
-    }
-    
-    /// Tests `payloadMax` in ChartCore
-    func test_payloadMax() throws {
-        // Execute the test
-        let doubleResponse: Double = ChartCore.payloadMax(for: Mocks.arrayOfValues_100_50_0_50_100())
-        
-        // The expected value
-        let doubleExpected: Double = 100.0;
-        
-        // Return the test result
-        XCTAssert(doubleResponse == doubleExpected, "Expected \(doubleExpected), got \(doubleResponse)");
-    }
-    
-    /// Tests `payloadMin` in ChartCore
-    func test_payloadMin() throws {
-        // Execute the test
-        let doubleResponse: Double = ChartCore.payloadMin(for: Mocks.arrayOfValues_100_50_0_50_100())
-        
-        // The expected value
-        let doubleExpected: Double = -100.0;
-        
-        // Return the test result
-        XCTAssert(doubleResponse == doubleExpected, "Expected \(doubleExpected), got \(doubleResponse)");
     }
 }

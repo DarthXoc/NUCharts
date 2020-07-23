@@ -85,9 +85,17 @@ class LineChartViewController: UIViewController, LineChartDataSource, LineChartD
 //        return .systemBlue;
 //    };
 
-//    func lineChart(_ lineChart: LineChart, axisXGridLineStyleForItemAt index: Int) -> ChartCore.LineStyle? {
-//        return .dotted;
-//    };
+    func lineChart(_ lineChart: LineChart, axisXGridLineStyleForItemAt index: Int) -> ChartCore.LineStyle? {
+        // Check to see if section titles are enabled
+        if (switchSectionTitles?.isOn ?? false) {
+            // Only show section titles every fifth section
+            if (index == 0 || (index + 1).isMultiple(of: 5)) {
+                return .solid;
+            }
+        }
+        
+        return nil;
+    };
 
 //    func lineChart(_ lineChart: LineChart, axisXGridLineWidthForItemAt index: Int) -> CGFloat? {
 //        return 3.0;
@@ -117,12 +125,20 @@ class LineChartViewController: UIViewController, LineChartDataSource, LineChartD
 //        return String("Item \(index)");
 //    };
     
-//    func numberOfItems(in lineChart: LineChart) -> Int {
-//        return arrayPayload?.count ?? 0;
-//    }
+    func lineChart(_ lineChart: LineChart, valueForItemAt index: Int) -> Double {
+        return arrayPayload?[index] ?? .zero;
+    };
     
-    func values(for lineChart: LineChart) -> [Double] {
-        return arrayPayload ?? [];
+    func maxValue(in lineChart: LineChart) -> Double {
+        return arrayPayload?.max() ?? .zero;
+    };
+    
+    func minValue(in lineChart: LineChart) -> Double {
+        return arrayPayload?.min() ?? .zero;
+    };
+    
+    func numberOfItems(in lineChart: LineChart) -> Int {
+        return arrayPayload?.count ?? .zero;
     };
     
     // MARK: - Validation

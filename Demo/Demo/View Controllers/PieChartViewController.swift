@@ -83,8 +83,12 @@ class PieChartViewController: UIViewController, PieChartDataSource, PieChartDele
         self.present(alertController, animated: true, completion: nil);
     };
     
-    func values(for pieChart: PieChart) -> [Double] {
-        return arrayPayload ?? [];
+    func pieChart(_ pieChart: PieChart, valueForItemAt index: Int) -> Double {
+        return arrayPayload?[index] ?? .zero;
+    }
+    
+    func numberOfItems(in pieChart: PieChart) -> Int {
+        return arrayPayload?.count ?? .zero;
     }
         
     // MARK: - Validation

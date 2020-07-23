@@ -85,9 +85,17 @@ class BarChartViewController: UIViewController, BarChartDataSource, BarChartDele
 //        return .systemBlue;
 //    }
 
-//    func barChart(_ barChart: BarChart, axisXGridLineStyleForItemAt index: Int) -> ChartCore.LineStyle? {
-//        return .dotted;
-//    }
+    func barChart(_ barChart: BarChart, axisXGridLineStyleForItemAt index: Int) -> ChartCore.LineStyle? {
+        // Check to see if section titles are enabled
+        if (switchSectionTitles?.isOn ?? false) {
+            // Only show section titles every fifth section
+            if (index == 0 || (index + 1).isMultiple(of: 5)) {
+                return .solid;
+            }
+        }
+        
+        return nil;
+    }
 
 //    func barChart(_ barChart: BarChart, axisXGridLineWidthForItemAt index: Int) -> CGFloat? {
 //        return 3.0;
@@ -116,13 +124,21 @@ class BarChartViewController: UIViewController, BarChartDataSource, BarChartDele
 //    func barChart(_ barChart: BarChart, tooltipTitleForItemAt index: Int) -> String {
 //        return String("Item \(index)");
 //    }
+
+    func barChart(_ barChart: BarChart, valueForItemAt index: Int) -> Double {
+        return arrayPayload?[index] ?? .zero;
+    }
     
-//    func numberOfItems(in barChart: BarChart) -> Int {
-//        return arrayPayload?.count ?? 0;
-//    }
+    func maxValue(in barChart: BarChart) -> Double {
+        return arrayPayload?.max() ?? .zero;
+    }
     
-    func values(for barChart: BarChart) -> [Double] {
-        return arrayPayload ?? [];
+    func minValue(in barChart: BarChart) -> Double {
+        return arrayPayload?.min() ?? .zero;
+    }
+    
+    func numberOfItems(in barChart: BarChart) -> Int {
+        return arrayPayload?.count ?? .zero;
     }
     
     // MARK: - Validation

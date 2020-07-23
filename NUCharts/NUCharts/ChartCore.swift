@@ -26,6 +26,12 @@ public class ChartCore {
         case half;
     }
     
+    /// Scroll locations
+    public enum ScrollLocation {
+        case left;
+        case right;
+    }
+    
     /// Text drawing direction
     internal enum TextDrawingDirection {
         case bottomToTop;
@@ -165,13 +171,7 @@ public class ChartCore {
     // MARK: - Calculations
     
     /// Calculates the incriment (i.e. how many pixels make up floatInterval)
-    internal static func calculateIncriment(in collectionView: UICollectionView, with arrayPayload: [Double]?) -> CGFloat {
-        // Find the max value in the payload
-        let doubleMaxValue: Double = self.payloadMax(for: arrayPayload);
-        
-        // Find the min value in the payload
-        let doubleMinValue: Double = self.payloadMin(for: arrayPayload);
-        
+    internal static func calculateIncriment(in collectionView: UICollectionView, maxValue doubleMaxValue: Double, minValue doubleMinValue: Double) -> CGFloat {
         // Calculate the range between the min and max values
         let doubleRange: Double = self.calculateRange(maxValue: doubleMaxValue, minValue: doubleMinValue);
         
@@ -182,7 +182,7 @@ public class ChartCore {
         let floatIncriment: CGFloat = (collectionView.contentSize.height / CGFloat(doubleRange)) * floatInterval;
         let floatIncrimentEmpty: CGFloat = (collectionView.contentSize.height / CGFloat(5)) * floatInterval;
         
-        return (arrayPayload?.count ?? 0) > 0 ? floatIncriment : floatIncrimentEmpty;
+        return doubleRange > 0 ? floatIncriment : floatIncrimentEmpty;
     }
     
     /// Calculates the interval / step that will be used while charting
@@ -238,37 +238,20 @@ public class ChartCore {
     }
     
     /// Calculate the location of the point on the y-axis
-    internal static func calculatePointLocationY(in collectionView: UICollectionView, with arrayPayload: [Double]?, at indexPath: IndexPath) -> CGFloat {
+    internal static func calculatePointLocationY(in collectionView: UICollectionView, payload doublePayload: Double, maxValue doubleMaxValue: Double, minValue doubleMinValue: Double) -> CGFloat {
         // Retreive the height of the collection view's content view
         let floatHeight: CGFloat = collectionView.contentSize.height
         
-        // Retreive the payload for this indexPath
-        let doublePayload: Double? = arrayPayload?[indexPath.row];
-        
         // Calculate the range between the min and max values
-        let doubleRange: Double = self.calculateRange(for: arrayPayload);
+        let doubleRange: Double = self.calculateRange(maxValue: doubleMaxValue, minValue: doubleMinValue);
         
         // Calculate the value incriment per pixel
         let floatValuePerPixel: CGFloat = floatHeight / CGFloat(doubleRange);
         
         // Calculate the location of the point on the y-axis
-        let floatLocationY: CGFloat = CGFloat(doublePayload ?? 0) * floatValuePerPixel;
+        let floatLocationY: CGFloat = CGFloat(doublePayload) * floatValuePerPixel;
         
         return floatLocationY;
-    }
-    
-    /// Calculates the range of a payload
-    internal static func calculateRange(for arrayPayload: [Double]?) -> Double {
-        // Find the max value in the payload
-        let doubleMaxValue: Double = self.payloadMax(for: arrayPayload);
-        
-        // Find the min value in the payload
-        let doubleMinValue: Double = self.payloadMin(for: arrayPayload);
-        
-        // Calculate the range between the min and max values
-        let doubleRange: Double = self.calculateRange(maxValue: doubleMaxValue, minValue: doubleMinValue);
-        
-        return doubleRange;
     }
     
     /// Calculates the range between two values
@@ -280,7 +263,7 @@ public class ChartCore {
     }
     
     /// Calculates the location of the zero axis grid line for a UICollectionView or a UICollectionViewCell
-    internal static func calculateZeroAxisLocation(for object: AnyObject, with arrayPayload: [Double]?) -> CGFloat {
+    internal static func calculateZeroAxisLocation(for object: AnyObject, max doubleMaxValue: Double, min doubleMinValue: Double) -> CGFloat {
         // Calculate floatHeight
         var floatHeight: CGFloat {
             // Check to see which object is requesting the zero axis height
@@ -292,12 +275,6 @@ public class ChartCore {
             
             return CGFloat.zero;
         };
-        
-        // Find the max value in the payload
-        let doubleMaxValue: Double = self.payloadMax(for: arrayPayload);
-        
-        // Find the min value in the payload
-        let doubleMinValue: Double = self.payloadMin(for: arrayPayload);
         
         // Calculate the range between the min and max values
         let doubleRange: Double = self.calculateRange(maxValue: doubleMaxValue, minValue: doubleMinValue);
@@ -316,26 +293,6 @@ public class ChartCore {
             // Calculate the location of the zero axis
             return CGFloat(doubleMaxValue) * floatValuePerPixel;
         }
-    }
-    
-    /// Finds the maximum value in the payload
-    internal static func payloadMax(for arrayPayload: [Double]?) -> Double {
-        // FIXME: This is the source of the slow down for extremely large (100,000+ item) datasource
-        
-        // Find the max value in the payload
-        let doubleMaxValue: Double = arrayPayload?.max() ?? 0;
-        
-        return doubleMaxValue;
-    }
-    
-    /// Finds the minimum value in the payload
-    internal static func payloadMin(for arrayPayload: [Double]?) -> Double {
-        // FIXME: This is the source of the slow down for extremely large (100,000+ item) datasource
-        
-        // Find the min value in the payload
-        let doubleMinValue: Double = arrayPayload?.min() ?? 0;
-        
-        return doubleMinValue;
     }
     
     // MARK: - Demo Functions

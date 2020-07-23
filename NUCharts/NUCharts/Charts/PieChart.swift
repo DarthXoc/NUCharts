@@ -9,6 +9,9 @@
 import UIKit
 
 public protocol PieChartDataSource: class {
+    /// Asks the delegate for the number of items that will be drawn on the chart
+    func numberOfItems(in pieChart: PieChart) -> Int;
+    
     /// Asks the delegate what the color of the slice should be
     func pieChart(_ pieChart: PieChart, colorForItemAt index: Int, selected boolSelected: Bool) -> UIColor;
     
@@ -18,11 +21,8 @@ public protocol PieChartDataSource: class {
     /// Asks the delegate what the value for the tooltip should be
     func pieChart(_ pieChart: PieChart, tooltipValueForItemAt index: Int) -> String;
     
-    /// Asks the delegate for the number of items that will be drawn on the chart
-    func numberOfItems(in pieChart: PieChart) -> Int;
-    
-    /// Asks the delegate for an array of values which will be drawn on the chart
-    func values(for pieChart: PieChart) -> [Double];
+    /// Asks the delegate for the value at the specified index
+    func pieChart(_ pieChart: PieChart, valueForItemAt index: Int) -> Double;
 }
 
 public protocol PieChartDelegate: class {
@@ -58,15 +58,7 @@ public extension PieChartDataSource {
     }
     
     func pieChart(_ pieChart: PieChart, tooltipValueForItemAt index: Int) -> String {
-        return String(self.values(for: pieChart)[index]);
-    }
-    
-    func numberOfItems(in pieChart: PieChart) -> Int {
-        return self.values(for: pieChart).count;
-    }
-    
-    func values(for pieChart: PieChart) -> [Double] {
-        return [];
+        return String(self.pieChart(pieChart, valueForItemAt: index));
     }
 }
 
@@ -125,8 +117,8 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
     /// An array of paths for all drawn slices
     private var arrayPaths: [CGPath] = [];
     
-    /// An array of values which will be drawn on the chart
-    private var arrayValues: [Double] = [];
+    /// The maximum value that will be displayed on the chart
+    private var doubleTotalValue: Double = .zero;
     
     /// The currently selected index
     private var intIndexSelected: Int?;
@@ -155,10 +147,10 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
     /// Calculate the percent of the total pie for the given index
     private func calculatePercent(forItemAt index: Int) -> CGFloat {
         // Calculate the total value of all items in the array of values
-        let doubleTotal: Double = arrayValues.reduce(0, +);
+        let doubleTotal: Double = doubleTotalValue;
         
         // Retreive the value for the given index
-        let doubleCurrent: Double = arrayValues[index];
+        let doubleCurrent: Double = dataSource!.pieChart(self, valueForItemAt: index);
         
         return CGFloat(doubleCurrent / doubleTotal);
     }
@@ -185,8 +177,14 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
         // Remove all subviews
         self.subviews.forEach({ $0.removeFromSuperview(); });
         
-        // Cache the array of values to a local variable
-        arrayValues = dataSource!.values(for: self);
+        // Reset the total value prior to calculating it
+        doubleTotalValue = .zero;
+        
+        // Iterate through each value in the chart
+        for index: Int in 0 ..< dataSource!.numberOfItems(in: self) {
+            // Calculate the total value
+            doubleTotalValue += dataSource!.pieChart(self, valueForItemAt: index);
+        }
         
         // Configure the UIView
         viewChart = UIView();
@@ -253,7 +251,7 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
                                            y: pieType == .full ? view!.frame.size.height / 2 : view!.frame.size.height);
         
         // Iterate through each object in the array of values
-        for intIndex: Int in 0 ..< arrayValues.count {
+        for intIndex: Int in 0 ..< dataSource!.numberOfItems(in: self) {
             // Calculate the percent of the pie that this slice will occupy
             let floatPercent: CGFloat = self.calculatePercent(forItemAt: intIndex);
             
