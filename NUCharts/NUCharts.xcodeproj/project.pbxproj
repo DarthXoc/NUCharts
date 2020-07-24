@@ -12,7 +12,6 @@
 		964AEC5C24BB9F3C00F787E1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964AEC5B24BB9F3C00F787E1 /* Mocks.swift */; };
 		96AD6D3A2499616C00A09DAF /* NUCharts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D256762492D2A7005E0AC2 /* NUCharts.framework */; };
 		96AD6D412499624E00A09DAF /* ChartCoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AD6D402499624E00A09DAF /* ChartCoreTest.swift */; };
-		96D2567B2492D2A7005E0AC2 /* NUCharts.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D256792492D2A7005E0AC2 /* NUCharts.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96D256A22492D2DA005E0AC2 /* ChartCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256A12492D2DA005E0AC2 /* ChartCore.swift */; };
 		96D256A62492D2FD005E0AC2 /* BarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256A52492D2FD005E0AC2 /* BarChart.swift */; };
 		96D256AA2492D30F005E0AC2 /* LineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D256A92492D30F005E0AC2 /* LineChart.swift */; };
@@ -36,7 +35,6 @@
 		96AD6D392499616C00A09DAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		96AD6D402499624E00A09DAF /* ChartCoreTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartCoreTest.swift; sourceTree = "<group>"; };
 		96D256762492D2A7005E0AC2 /* NUCharts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NUCharts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		96D256792492D2A7005E0AC2 /* NUCharts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NUCharts.h; sourceTree = "<group>"; };
 		96D2567A2492D2A7005E0AC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		96D256A12492D2DA005E0AC2 /* ChartCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartCore.swift; sourceTree = "<group>"; };
 		96D256A52492D2FD005E0AC2 /* BarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChart.swift; sourceTree = "<group>"; };
@@ -105,7 +103,6 @@
 				96D256A32492D2E7005E0AC2 /* Charts */,
 				964AEC5824BA1E4900F787E1 /* Extensions */,
 				96D2567A2492D2A7005E0AC2 /* Info.plist */,
-				96D256792492D2A7005E0AC2 /* NUCharts.h */,
 			);
 			path = NUCharts;
 			sourceTree = "<group>";
@@ -127,7 +124,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96D2567B2492D2A7005E0AC2 /* NUCharts.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,7 +341,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -402,7 +398,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
