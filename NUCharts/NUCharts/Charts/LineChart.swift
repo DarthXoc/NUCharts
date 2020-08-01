@@ -123,7 +123,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         public var negativeColor: UIColor = .systemRed;
         
         /// The line segment's color if drawn above the zero axis
-        public var positiveColor: UIColor = .link;
+        public var positiveColor: UIColor?;
         
         /// The line's width
         public var width: CGFloat = 2.0;
@@ -141,10 +141,10 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         public var negativeColorSelected: UIColor = ChartCore.blendColors(colors: [.systemRed, .black]);
         
         /// The point's color if drawn above the zero axis
-        public var positiveColor: UIColor = .link;
+        public var positiveColor: UIColor?;
         
         /// The point's color when it has been selected if drawn above the zero axis
-        public var positiveColorSelected: UIColor = ChartCore.blendColors(colors: [.link, .black]);
+        public var positiveColorSelected: UIColor?;
         
         /// Determines if the point is drawn filled or hollow
         public var fill: Bool = false;
@@ -156,7 +156,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
     /// Properties used in the drawing segments on the cart
     public struct Segment {
         /// The segment's fill color
-        public var fillColor: UIColor = UIColor.link.withAlphaComponent(0.50);
+        public var fillColor: UIColor?;
         
         /// Properties used in the drawing of lines
         public var line: Line = Line();
@@ -349,6 +349,30 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
             
             // Reset the location of the tooltip
             rectTooltip = nil;
+        }
+        
+        // Check to see the line's positive color was specified
+        if (self.settings.segment.fillColor == nil) {
+            // Set the line's positive color to the chart's tint color
+            self.settings.segment.fillColor = self.tintColor.withAlphaComponent(0.50);
+        }
+        
+        // Check to see the line's positive color was specified
+        if (self.settings.segment.line.positiveColor == nil) {
+            // Set the line's positive color to the chart's tint color
+            self.settings.segment.line.positiveColor = self.tintColor;
+        }
+        
+        // Check to see the point's positive color was specified
+        if (self.settings.segment.point.positiveColor == nil) {
+            // Set the point's positive color to the chart's tint color blended with black
+            self.settings.segment.point.positiveColor = self.tintColor;
+        }
+        
+        // Check to see the point's positive color when it has been selected was specified
+        if (self.settings.segment.point.positiveColorSelected == nil) {
+            // Set the point's positive color when it has been selected to the chart's tint color blended with black
+            self.settings.segment.point.positiveColorSelected = ChartCore.blendColors(colors: [self.tintColor, .black]);
         }
         
         // Remove the background color
@@ -626,7 +650,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
                                      pointNextMid,
                                      pointCellBottomRight,
                                      pointCellBottomLeft],
-                            color: self.settings.segment.fillColor,
+                            color: self.settings.segment.fillColor!,
                             in: cell.contentView);
         
         // Check to see if the line segment will cross the zero axis
@@ -634,21 +658,21 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
             // Draw a line segment from the start point to the end point
             ChartCore.drawLine(from: pointPreviousMid,
                                to: pointCurrent,
-                               color: floatLocationYCurrent <= floatZeroAxis && floatLocationYPreviousMid <= floatZeroAxis ? self.settings.segment.line.positiveColor : self.settings.segment.line.negativeColor,
+                               color: floatLocationYCurrent <= floatZeroAxis && floatLocationYPreviousMid <= floatZeroAxis ? self.settings.segment.line.positiveColor! : self.settings.segment.line.negativeColor,
                                width: self.settings.segment.line.width,
                                in: cell.contentView);
         } else {
             // Draw a line segment from the start point to the zero axis cross point
             ChartCore.drawLine(from: pointPreviousMid,
                                to: pointPreviousCrossZeroAxis,
-                               color: pointPreviousMid.y <= pointPreviousCrossZeroAxis.y ? self.settings.segment.line.positiveColor : self.settings.segment.line.negativeColor,
+                               color: pointPreviousMid.y <= pointPreviousCrossZeroAxis.y ? self.settings.segment.line.positiveColor! : self.settings.segment.line.negativeColor,
                                width: self.settings.segment.line.width,
                                in: cell.contentView);
             
             // Draw a line segment from the zero axis cross point to the end point
             ChartCore.drawLine(from: pointPreviousCrossZeroAxis,
                                to: pointCurrent,
-                               color: pointCurrent.y <= pointPreviousCrossZeroAxis.y ? self.settings.segment.line.positiveColor : self.settings.segment.line.negativeColor,
+                               color: pointCurrent.y <= pointPreviousCrossZeroAxis.y ? self.settings.segment.line.positiveColor! : self.settings.segment.line.negativeColor,
                                width: self.settings.segment.line.width,
                                in: cell.contentView);
         }
@@ -658,21 +682,21 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
             // Draw a line segment from the start point to the end point
             ChartCore.drawLine(from: pointCurrent,
                                to: pointNextMid,
-                               color: floatLocationYCurrent <= floatZeroAxis && floatLocationYNextMid <= floatZeroAxis ? self.settings.segment.line.positiveColor : self.settings.segment.line.negativeColor,
+                               color: floatLocationYCurrent <= floatZeroAxis && floatLocationYNextMid <= floatZeroAxis ? self.settings.segment.line.positiveColor! : self.settings.segment.line.negativeColor,
                                width: self.settings.segment.line.width,
                                in: cell.contentView);
         } else {
             // Draw a line segment from the start point to the zero axis cross point
             ChartCore.drawLine(from: pointCurrent,
                                to: pointNextCrossZeroAxis,
-                               color: pointCurrent.y <= pointNextCrossZeroAxis.y ? self.settings.segment.line.positiveColor : self.settings.segment.line.negativeColor,
+                               color: pointCurrent.y <= pointNextCrossZeroAxis.y ? self.settings.segment.line.positiveColor! : self.settings.segment.line.negativeColor,
                                width: self.settings.segment.line.width,
                                in: cell.contentView);
             
             // Draw a line segment from the zero axis cross point to the end point
             ChartCore.drawLine(from: pointNextCrossZeroAxis,
                                to: pointNextMid,
-                               color: pointNextMid.y <= pointNextCrossZeroAxis.y ? self.settings.segment.line.positiveColor : self.settings.segment.line.negativeColor,
+                               color: pointNextMid.y <= pointNextCrossZeroAxis.y ? self.settings.segment.line.positiveColor! : self.settings.segment.line.negativeColor,
                                width: self.settings.segment.line.width,
                                in: cell.contentView);
         }
@@ -695,15 +719,15 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         var colorPointBorder: UIColor {
             // Check to see if a point is less than or greater than zero and if it is selected
             if (0 <= floatLocationY && indexPath != indexPathSelected) {
-                return self.settings.segment.point.positiveColor;
+                return self.settings.segment.point.positiveColor!;
             } else if (0 <= floatLocationY && indexPath == indexPathSelected) {
-                return self.settings.segment.point.positiveColorSelected;
+                return self.settings.segment.point.positiveColorSelected!;
             } else if (0 > floatLocationY && indexPath != indexPathSelected) {
                 return self.settings.segment.point.negativeColor;
             } else if (0 > floatLocationY && indexPath == indexPathSelected) {
                 return self.settings.segment.point.negativeColorSelected;
             } else {
-                return self.settings.segment.point.positiveColor;
+                return self.settings.segment.point.positiveColor!;
             }
         };
             

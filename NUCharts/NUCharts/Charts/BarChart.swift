@@ -118,10 +118,10 @@ public class BarChart: UIView, UICollectionViewDataSource , UICollectionViewDele
         public var negativeSelectedColor: UIColor = ChartCore.blendColors(colors: [.systemRed, .black]);
         
         /// The bar's positive color
-        public var positiveColor: UIColor = .link;
+        public var positiveColor: UIColor?;
         
         /// The bar's positive color when it has been selected
-        public var positiveSelectedColor: UIColor = ChartCore.blendColors(colors: [.link, .black]);
+        public var positiveSelectedColor: UIColor?;
                 
         /// The spacing between bars
         public var spacing: CGFloat = 16.0;
@@ -229,6 +229,18 @@ public class BarChart: UIView, UICollectionViewDataSource , UICollectionViewDele
             
             // Reset the location of the tooltip
             rectTooltip = nil;
+        }
+        
+        // Check to see the bar's positive color was specified
+        if (self.settings.bar.positiveColor == nil) {
+            // Set the bar's positive color to the chart's tint color
+            self.settings.bar.positiveColor = self.tintColor;
+        }
+        
+        // Check to see the bar's positive color when it has been selected was specified
+        if (self.settings.bar.positiveSelectedColor == nil) {
+            // Set the bar's positive color when it has been selected to the chart's tint color blended with black
+            self.settings.bar.positiveSelectedColor = ChartCore.blendColors(colors: [self.tintColor, .black]);
         }
         
         // Remove the background color
@@ -466,15 +478,15 @@ public class BarChart: UIView, UICollectionViewDataSource , UICollectionViewDele
         var colorBar: UIColor {
             // Check to see if a point is less than or greater than zero and if it is selected
             if (0 <= floatLocationY && indexPath != indexPathSelected) {
-                return self.settings.bar.positiveColor;
+                return self.settings.bar.positiveColor!;
             } else if (0 <= floatLocationY && indexPath == indexPathSelected) {
-                return self.settings.bar.positiveSelectedColor;
+                return self.settings.bar.positiveSelectedColor!;
             } else if (0 > floatLocationY && indexPath != indexPathSelected) {
                 return self.settings.bar.negativeColor;
             } else if (0 > floatLocationY && indexPath == indexPathSelected) {
                 return self.settings.bar.negativeSelectedColor;
             } else {
-                return self.settings.bar.positiveColor;
+                return self.settings.bar.positiveColor!;
             }
         };
         

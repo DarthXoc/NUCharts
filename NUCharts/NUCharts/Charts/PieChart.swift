@@ -39,7 +39,7 @@ public extension PieChartDataSource {
         let floatAdjustment: CGFloat = (CGFloat(index) / CGFloat(intNumberOfItems)) / 2;
         
         // The original color
-        let colorOriginal: CIColor = CIColor(color: !boolSelected ? pieChart.settings.slice.color : pieChart.settings.slice.selectedColor);
+        let colorOriginal: CIColor = CIColor(color: !boolSelected ? pieChart.settings.slice.color! : pieChart.settings.slice.selectedColor!);
         
         // Calculate the new color
         let colorNew: CIColor = CIColor(red: colorOriginal.red + floatAdjustment,
@@ -106,10 +106,10 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
         public var border: ChartCore.Border? = ChartCore.Border(color: nil, width: 1.0);
         
         /// The color used by slices; this color will be stepped down incrimentally when the data source method pieChart(colorForItemAt:selected:) has not been implemented
-        public var color: UIColor = .link;
+        public var color: UIColor?;
         
         /// The color used by selected slices; this color will be stepped down incrimentally when the data source method pieChart(colorForItemAt:selected:) has not been implemented
-        public var selectedColor: UIColor = ChartCore.blendColors(colors: [.link, .black]);
+        public var selectedColor: UIColor?;
     }
     
     // MARK: - Variables
@@ -173,6 +173,18 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
             
             // Reset the location of the tooltip
             rectTooltip = nil;
+        }
+        
+        // Check to see the pie's color has been selected was specified
+        if (self.settings.slice.color == nil) {
+            // Set the pie's positive color to the chart's tint color
+            self.settings.slice.color = self.tintColor;
+        }
+        
+        // Check to see the pie's selected color when it has been selected was specified
+        if (self.settings.slice.selectedColor == nil) {
+            // Set the pie's positive color when it has been selected to the chart's tint color blended with black
+            self.settings.slice.selectedColor = ChartCore.blendColors(colors: [self.tintColor, .black]);
         }
         
         // Remove the background color
