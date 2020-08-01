@@ -177,6 +177,13 @@ public class BarChart: UIView, UICollectionViewDataSource , UICollectionViewDele
     /// The current location and dimensions of the displayed tooltip
     private var rectTooltip: CGRect?;
     
+    /// Returns the currently selected index
+    public var selectedIndex: Int? {
+        get {
+            self.indexPathSelected?.row;
+        }
+    }
+    
     /// The chart's settings
     public var settings: Settings = Settings();
     

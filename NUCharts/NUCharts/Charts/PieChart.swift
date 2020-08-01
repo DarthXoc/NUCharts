@@ -129,6 +129,13 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
     /// The chart's settings
     public var settings: Settings = Settings();
     
+    /// Returns the currently selected index
+    public var selectedIndex: Int? {
+        get {
+            self.intIndexSelected;
+        }
+    }
+    
     /// The object in which the chart will be drawn
     private var viewChart: UIView?;
     
