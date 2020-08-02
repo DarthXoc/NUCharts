@@ -12,16 +12,22 @@ public protocol PieChartDataSource: class {
     /// Asks the delegate for the number of items that will be drawn on the chart
     func numberOfItems(in pieChart: PieChart) -> Int;
     
-    /// Asks the delegate what the color of the slice should be
-    func pieChart(_ pieChart: PieChart, colorForItemAt index: Int, selected boolSelected: Bool) -> UIColor;
+    /// Asks the data source what the background color of the slice should be
+    func pieChart(_ pieChart: PieChart, backgroundColorForItemAt index: Int, selected boolSelected: Bool) -> UIColor;
     
-    /// Asks the delegate what the title for the tooltip should be
+    /// Asks the data source what the fill color of the slice should be
+    func pieChart(_ pieChart: PieChart, fillColorForItemAt index: Int, selected boolSelected: Bool) -> UIColor;
+    
+    /// Asks the data source what percentage of the slice should be filled
+    func pieChart(_ pieChart: PieChart, percentFillForItemAt index: Int) -> CGFloat;
+    
+    /// Asks the data source what the title for the tooltip should be
     func pieChart(_ pieChart: PieChart, tooltipTitleForItemAt index: Int) -> String;
     
-    /// Asks the delegate what the value for the tooltip should be
+    /// Asks the data source what the value for the tooltip should be
     func pieChart(_ pieChart: PieChart, tooltipValueForItemAt index: Int) -> String;
     
-    /// Asks the delegate for the value at the specified index
+    /// Asks the data source for the value at the specified index
     func pieChart(_ pieChart: PieChart, valueForItemAt index: Int) -> Double;
 }
 
@@ -31,7 +37,11 @@ public protocol PieChartDelegate: class {
 }
 
 public extension PieChartDataSource {
-    func pieChart(_ pieChart: PieChart, colorForItemAt index: Int, selected boolSelected: Bool) -> UIColor {
+    func pieChart(_ pieChart: PieChart, backgroundColorForItemAt index: Int, selected boolSelected: Bool) -> UIColor {
+        return .opaqueSeparator;
+    };
+    
+    func pieChart(_ pieChart: PieChart, fillColorForItemAt index: Int, selected boolSelected: Bool) -> UIColor {
         // Calculate the number of items in the array of values
         let intNumberOfItems: Int = self.numberOfItems(in: pieChart);
         
@@ -51,7 +61,11 @@ public extension PieChartDataSource {
         let color: UIColor = UIColor(ciColor: colorNew);
         
         return color;
-    };
+    }
+    
+    func pieChart(_ pieChart: PieChart, percentFillForItemAt index: Int) -> CGFloat {
+        return 1.0;
+    }
     
     func pieChart(_ pieChart: PieChart, tooltipTitleForItemAt index: Int) -> String {
         return "Index \(index)";
@@ -274,8 +288,14 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
             // Calculate the percent of the pie that this slice will occupy
             let floatPercent: CGFloat = self.calculatePercent(forItemAt: intIndex);
             
+            // Calculate the percent of the slice that will be filled
+            let floatPercentFill: CGFloat = self.calculatePercent(forItemAt: intIndex) * dataSource!.pieChart(self, percentFillForItemAt: intIndex);
+            
             // Calculate the end angle
             let floatAngleEnd: CGFloat = floatAngle + ((pieType == .full ? 360 : 180) * floatPercent);
+            
+            // Calculate the end angle for the slice's fill
+            let floatAngleEndFill: CGFloat = floatAngle + ((pieType == .full ? 360 : 180) * floatPercentFill);
             
             // Draw the slice
             arrayPaths.append(ChartCore.drawSlice(from: pointCenter,
@@ -285,9 +305,21 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
                                                   angleEnd: floatAngleEnd,
                                                   borderColor: self.settings.slice.border?.color,
                                                   borderWidth: self.settings.slice.border?.width,
-                                                  fillColor: dataSource!.pieChart(self, colorForItemAt: intIndex, selected: intIndex == intIndexSelected),
+                                                  fillColor: dataSource!.pieChart(self, backgroundColorForItemAt: intIndex, selected: intIndex == intIndexSelected),
                                                   for: pieType,
                                                   in: view));
+            
+            // Draw the slice's fill
+            ChartCore.drawSlice(from: pointCenter,
+                                radius: floatRadius,
+                                donutRadius: floatRadius / 2,
+                                angleStart: floatAngle,
+                                angleEnd: floatAngleEndFill,
+                                borderColor: self.settings.slice.border?.color,
+                                borderWidth: self.settings.slice.border?.width,
+                                fillColor: dataSource!.pieChart(self, fillColorForItemAt: intIndex, selected: intIndex == intIndexSelected),
+                                for: pieType,
+                                in: view);
             
             // Update the current angle
             floatAngle = floatAngleEnd;

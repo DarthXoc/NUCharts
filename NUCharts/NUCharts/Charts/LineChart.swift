@@ -9,43 +9,43 @@
 import UIKit
 
 public protocol LineChartDataSource: class {
-    /// Asks the delegate whether the X-Axis grid line should be shown
+    /// Asks the data source whether the X-Axis grid line should be shown
     func lineChart(_ lineChart: LineChart, axisXGridLineActiveForItemAt index: Int) -> Bool?;
     
-    /// Asks the delegate what the color of the X-Axis grid line should be
+    /// Asks the data source what the color of the X-Axis grid line should be
     func lineChart(_ lineChart: LineChart, axisXGridLineColorForItemAt index: Int) -> UIColor?;
     
-    /// Asks the delegate what the line style of the X-Axis grid line should be
+    /// Asks the data source what the line style of the X-Axis grid line should be
     func lineChart(_ lineChart: LineChart, axisXGridLineStyleForItemAt index: Int) -> ChartCore.LineStyle?;
     
-    /// Asks the delegate what the width of the X-Axis grid line should be
+    /// Asks the data source what the width of the X-Axis grid line should be
     func lineChart(_ lineChart: LineChart, axisXGridLineWidthForItemAt index: Int) -> CGFloat?;
     
-    /// Asks the delegate for the title of this section
+    /// Asks the data source for the title of this section
     func lineChart(_ lineChart: LineChart, sectionTitleForItemAt index: Int) -> String?;
     
-    /// Asks the delegate what the color of the section title should be
+    /// Asks the data source what the color of the section title should be
     func lineChart(_ lineChart: LineChart, sectionTitleColorForItemAt index: Int) -> UIColor?;
     
-    /// Asks the delegate what the font of the section title should be
+    /// Asks the data source what the font of the section title should be
     func lineChart(_ lineChart: LineChart, sectionTitleFontForItemAt index: Int) -> UIFont;
     
-    /// Asks the delegate what the title for the tooltip should be
+    /// Asks the data source what the title for the tooltip should be
     func lineChart(_ lineChart: LineChart, tooltipTitleForItemAt index: Int) -> String;
     
-    /// Asks the delegate what the value for the tooltip should be
+    /// Asks the data source what the value for the tooltip should be
     func lineChart(_ lineChart: LineChart, tooltipValueForItemAt index: Int) -> String;
     
-    /// Asks the delegate for the value at the specified index
+    /// Asks the data source for the value at the specified index
     func lineChart(_ lineChart: LineChart, valueForItemAt index: Int) -> Double
     
-    /// Asks the delegate for the max value of the chart
+    /// Asks the data source for the max value of the chart
     func maxValue(in lineChart: LineChart) -> Double;
     
-    /// Asks the delegate for the min value of the chart
+    /// Asks the data source for the min value of the chart
     func minValue(in lineChart: LineChart) -> Double;
     
-    /// Asks the delegate for the number of items that will be drawn on the chart
+    /// Asks the data source for the number of items that will be drawn on the chart
     func numberOfItems(in lineChart: LineChart) -> Int;
 }
 
@@ -191,11 +191,14 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         /// The chart's initial scroll location after it has been drawn
         public var initialScrollLocation: ChartCore.ScrollLocation = .left;
         
-        /// Properties used in configuring the line segments on a line chart
-        public var segment: Segment = Segment();
+        /// Determines if a chart will show a bounce effect on an overscroll event
+        public var overscroll: Bool = false;
         
         /// Padding applied to the left, top, right and bottom edges of the chart
         public var padding: UIEdgeInsets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0);
+        
+        /// Properties used in configuring the line segments on a line chart
+        public var segment: Segment = Segment();
         
         /// Properties used in the drawing of tooltips
         public var tooltip: ChartCore.Tooltip = ChartCore.Tooltip();
@@ -399,6 +402,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         let collectionView: UICollectionView = UICollectionView(frame: CGRect(x: CGFloat.zero, y: CGFloat.zero, width: self.frame.size.width, height: self.frame.size.height), collectionViewLayout: collectionViewFlowLayout);
         collectionView.backgroundView = UIView(frame: collectionView.frame);
         collectionView.backgroundView?.backgroundColor = self.settings.backgroundColor;
+        collectionView.bounces = self.settings.overscroll;
         collectionView.dataSource = self;
         collectionView.delegate = self;
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "collectionViewCell");
