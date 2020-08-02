@@ -416,6 +416,12 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
         // Update the selected index
         intIndexSelected = intIndex;
         
+        // Check to see if intIndexSelected is nil
+        if (intIndexSelected == nil) {
+            // Reset the location of the tooltip
+            rectTooltip = nil;
+        }
+        
         // Draw the pie
         self.drawPie(self.settings.pieType, in: viewChart);
     }
