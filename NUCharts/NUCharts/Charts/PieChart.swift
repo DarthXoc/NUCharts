@@ -101,6 +101,9 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
         /// The chart's corner radius
         public var cornerRadius: CGFloat = 8.0;
         
+        /// The size of the center 'donut' hole, expressed at a percent of the pie's radius
+        public var donutHole: CGFloat = .zero;
+        
         /// Padding applied to the left, top, right and bottom edges of the chart
         public var padding: UIEdgeInsets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0);
         
@@ -300,7 +303,7 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
             // Draw the slice
             arrayPaths.append(ChartCore.drawSlice(from: pointCenter,
                                                   radius: floatRadius,
-                                                  donutRadius: floatRadius / 2,
+                                                  donutRadius: floatRadius * self.settings.donutHole,
                                                   angleStart: floatAngle,
                                                   angleEnd: floatAngleEnd,
                                                   borderColor: self.settings.slice.border?.color,
@@ -312,7 +315,7 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
             // Draw the slice's fill
             ChartCore.drawSlice(from: pointCenter,
                                 radius: floatRadius,
-                                donutRadius: floatRadius / 2,
+                                donutRadius: floatRadius * self.settings.donutHole,
                                 angleStart: floatAngle,
                                 angleEnd: floatAngleEndFill,
                                 borderColor: self.settings.slice.border?.color,

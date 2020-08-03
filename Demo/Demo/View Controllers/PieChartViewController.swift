@@ -53,6 +53,9 @@ class PieChartViewController: UIViewController, PieChartDataSource, PieChartDele
         // Set the type of pie chart that will be drawn
         pieChart?.settings.pieType = segmentedControlPieType?.selectedSegmentIndex == 0 ? .half : .full;
         
+        // Set the size of the donut hole
+        pieChart?.settings.donutHole = segmentedControlPieType?.selectedSegmentIndex == 0 ? 0.5 : .zero;
+        
         // Draw the chart
         pieChart?.draw();
     }
