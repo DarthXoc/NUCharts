@@ -801,6 +801,7 @@ public class ChartCore {
         
         // Configure the CATextLayer
         let layerTitle: CATextLayer = CATextLayer();
+        layerTitle.alignmentMode = .center;
         layerTitle.contentsScale = UIScreen.main.scale;
         layerTitle.frame = CGRect(x: floatPointStartTooltipTitleX + ((floatTooltipTitleValueWidth - attributedStringTitle.size().width) / 2),
                                   y: floatPointStartTooltipTitleY,
@@ -814,6 +815,7 @@ public class ChartCore {
         
         // Configure the CATextLayer
         let layerValue: CATextLayer = CATextLayer();
+        layerValue.alignmentMode = .center;
         layerValue.contentsScale = UIScreen.main.scale;
         layerValue.frame = CGRect(x: floatPointStartTooltipValueX + ((floatTooltipTitleValueWidth - attributedStringValue.size().width) / 2),
                                   y: floatPointStartTooltipValueY,
