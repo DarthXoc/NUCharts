@@ -335,7 +335,7 @@ public class ChartCore {
     // MARK: - Colors
     
     /// Blends multiple UIColors together into a new UIColor
-    internal static func blendColors(colors: [UIColor]) -> UIColor {
+    public static func blendColors(colors: [UIColor]) -> UIColor {
         // Calculate the average RGBA values
         let floatRed: CGFloat = colors.reduce(0) { $0 + CIColor(color: $1).red } / CGFloat(colors.count);
         let floatGreen: CGFloat = colors.reduce(0) { $0 + CIColor(color: $1).green } / CGFloat(colors.count);
