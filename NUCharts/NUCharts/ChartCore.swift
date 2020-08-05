@@ -98,8 +98,17 @@ public class ChartCore {
         /// The grid line's style
         public var lineStyle: LineStyle = .solid;
         
-        /// The grid' line's width
+        /// The grid line's width
         public var width: CGFloat = 0.33;
+    }
+    
+    /// Properties returned after a shape is drawn
+    internal struct SliceBounds {
+        /// The center point of the slice
+        internal var centerPoint: CGPoint
+        
+        /// The slice's path
+        internal var path: CGPath;
     }
     
     /// Properties used in the drawing of tooltips
@@ -504,29 +513,53 @@ public class ChartCore {
     }
     
     /// Draws a slice of a pie
-    @discardableResult internal static func drawSlice(from pointCenter: CGPoint, radius floatRadius: CGFloat, donutRadius floatDonutRadius: CGFloat = .zero, angleStart floatAngleStart: CGFloat, angleEnd floatAngleEnd: CGFloat, borderColor colorBorder: UIColor? = nil, borderWidth floatBorderWidth: CGFloat? = nil, fillColor colorFill: UIColor, for pieType: PieType, in view: UIView?) -> CGPath {
+    @discardableResult internal static func drawSlice(from pointCenter: CGPoint, radius floatRadius: CGFloat, donutRadius floatDonutRadius: CGFloat = .zero, angleStart floatAngleStart: CGFloat, angleEnd floatAngleEnd: CGFloat, borderColor colorBorder: UIColor? = nil, borderWidth floatBorderWidth: CGFloat? = nil, fillColor colorFill: UIColor, for pieType: PieType, in view: UIView?) -> SliceBounds {
         
         // MARK: Draw pie slice's background
         
         // Create a mutable path
         let path: CGMutablePath = CGMutablePath();
         
-        // Add the slice
+        // Add the outter slice to the mid point
         path.addArc(center: pointCenter,
                     radius: floatRadius,
                     startAngle: CGFloat.pi * (floatAngleStart / 180),
+                    endAngle: CGFloat.pi * ((floatAngleStart + ((floatAngleEnd - floatAngleStart) / 2)) / 180),
+                    clockwise: false);
+        
+        // Save the outter midpoint to a variable
+        let pointOutterMidpoint: CGPoint = path.currentPoint;
+        
+        // Add the outter slice to the end point
+        path.addArc(center: pointCenter,
+                    radius: floatRadius,
+                    startAngle: CGFloat.pi * ((floatAngleStart + (floatAngleEnd - floatAngleStart) / 2) / 180),
                     endAngle: CGFloat.pi * (floatAngleEnd / 180),
                     clockwise: false);
         
-        // Add the donut hole (if not specified, a point will be drawn to the center of the pie)
+        // Add the inner slice to the mid point (if specified, a donut hole will be drawn, if not, a point will be drawn to the center of the pie)
         path.addArc(center: pointCenter,
                     radius: floatDonutRadius,
                     startAngle: CGFloat.pi * (floatAngleEnd / 180),
+                    endAngle: CGFloat.pi * ((floatAngleEnd - ((floatAngleEnd - floatAngleStart) / 2)) / 180),
+                    clockwise: true);
+        
+        // Save the inner midpoint to a variable
+        let pointInnerMidpoint: CGPoint = path.currentPoint;
+        
+        // Add the inner slice to the end point (if specified, a donut hole will be drawn, if not, a point will be drawn to the center of the pie)
+        path.addArc(center: pointCenter,
+                    radius: floatDonutRadius,
+                    startAngle: CGFloat.pi * ((floatAngleEnd - ((floatAngleEnd - floatAngleStart) / 2)) / 180),
                     endAngle: CGFloat.pi * (floatAngleStart / 180),
                     clockwise: true);
         
         // Close the path
         path.closeSubpath();
+        
+        // Calculate the center of the slice
+        let pointSliceCenter: CGPoint = CGPoint(x: (pointOutterMidpoint.x + pointInnerMidpoint.x) / 2,
+                                                y: (pointOutterMidpoint.y + pointInnerMidpoint.y) / 2);
         
         // Configure the CAShapeLayer
         let layer: CAShapeLayer = CAShapeLayer();
@@ -568,7 +601,8 @@ public class ChartCore {
         // Add the layer to the view
         view?.layer.addSublayer(layerBorder);
         
-        return path;
+        return SliceBounds(centerPoint: pointSliceCenter,
+                           path: path);
     }
     
     /// Draws text at the specified point

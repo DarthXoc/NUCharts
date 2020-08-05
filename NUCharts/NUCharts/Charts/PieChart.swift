@@ -132,7 +132,7 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
     // MARK: - Variables
     
     /// An array of paths for all drawn slices
-    private var arrayPaths: [CGPath] = [];
+    private var arraySliceBounds: [ChartCore.SliceBounds] = [];
     
     /// The maximum value that will be displayed on the chart
     private var doubleTotalValue: Double = .zero;
@@ -257,8 +257,8 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
     
     /// Draws the pie chart
     private func drawPie(_ pieType: ChartCore.PieType, in view: UIView?) {
-        // Reset the array of paths
-        arrayPaths = [];
+        // Reset the array of slice bounds
+        arraySliceBounds = [];
         
         // Remove all sublayers
         view?.layer.sublayers?.forEach({ $0.removeFromSuperlayer() });
@@ -301,16 +301,16 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
             let floatAngleEndFill: CGFloat = floatAngle + ((pieType == .full ? 360 : 180) * floatPercentFill);
             
             // Draw the slice
-            arrayPaths.append(ChartCore.drawSlice(from: pointCenter,
-                                                  radius: floatRadius,
-                                                  donutRadius: floatRadius * self.settings.donutHole,
-                                                  angleStart: floatAngle,
-                                                  angleEnd: floatAngleEnd,
-                                                  borderColor: self.settings.slice.border?.color,
-                                                  borderWidth: self.settings.slice.border?.width,
-                                                  fillColor: dataSource!.pieChart(self, backgroundColorForItemAt: intIndex, selected: intIndex == intIndexSelected),
-                                                  for: pieType,
-                                                  in: view));
+            arraySliceBounds.append(ChartCore.drawSlice(from: pointCenter,
+                                                        radius: floatRadius,
+                                                        donutRadius: floatRadius * self.settings.donutHole,
+                                                        angleStart: floatAngle,
+                                                        angleEnd: floatAngleEnd,
+                                                        borderColor: self.settings.slice.border?.color,
+                                                        borderWidth: self.settings.slice.border?.width,
+                                                        fillColor: dataSource!.pieChart(self, backgroundColorForItemAt: intIndex, selected: intIndex == intIndexSelected),
+                                                        for: pieType,
+                                                        in: view));
             
             // Draw the slice's fill
             ChartCore.drawSlice(from: pointCenter,
@@ -336,17 +336,14 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
     private func drawTooltip() {
         // Check to see if the selected index path is the current index path
         if (intIndexSelected != nil) {
-            // Retreive the bounding box for this path
-            let rectBoundingBox: CGRect = arrayPaths[intIndexSelected!].boundingBoxOfPath;
-            
             // Calculate the center point
-            let pointCenter: CGPoint = rectBoundingBox.centerPoint();
+            let pointSliceCenter: CGPoint = arraySliceBounds[intIndexSelected!].centerPoint;
             
             // Setup an array to house tooltip direction attributes
             var arrayTooltipDirection: [ChartCore.TooltipDirection] = [];
             
             // Check to see what direction the tooltip should open
-            if (pointCenter.y > (viewChart!.frame.size.height / 2)) {
+            if (pointSliceCenter.y > (viewChart!.frame.size.height / 2)) {
                 // Draw the tooltip upwards
                 arrayTooltipDirection.append(.up);
             } else {
@@ -355,7 +352,7 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
             }
             
             // Draw the tooltip
-            var rectTooltipLocal: CGRect? = ChartCore.drawTooltip(from: pointCenter,
+            var rectTooltipLocal: CGRect? = ChartCore.drawTooltip(from: pointSliceCenter,
                                                                   direction: arrayTooltipDirection,
                                                                   title: dataSource!.pieChart(self, tooltipTitleForItemAt: intIndexSelected!),
                                                                   value: dataSource!.pieChart(self, tooltipValueForItemAt: intIndexSelected!),
@@ -372,7 +369,7 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
             }
             
             // Draw the tooltip
-            rectTooltipLocal = ChartCore.drawTooltip(from: pointCenter,
+            rectTooltipLocal = ChartCore.drawTooltip(from: pointSliceCenter,
                                                      direction: arrayTooltipDirection,
                                                      title: dataSource!.pieChart(self, tooltipTitleForItemAt: intIndexSelected!),
                                                      value: dataSource!.pieChart(self, tooltipValueForItemAt: intIndexSelected!),
@@ -401,9 +398,9 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
             return;
         } else {
             // Iterate through each path in the array of paths
-            for index: Int in 0 ..< arrayPaths.count {
+            for index: Int in 0 ..< arraySliceBounds.count {
                 // Check to see if the path contains the touch point
-                if (arrayPaths[index].contains(pointTouch)) {
+                if (arraySliceBounds[index].path.contains(pointTouch)) {
                     // Check to see if the current index path is the same as the selected index path
                     if (index == intIndexSelected) {
                         // Reset the selected indexPath
