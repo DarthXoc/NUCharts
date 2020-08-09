@@ -286,19 +286,55 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
         let pointCenter: CGPoint = CGPoint(x: view!.frame.size.width / 2,
                                            y: pieType == .full ? view!.frame.size.height / 2 : view!.frame.size.height);
         
-        // Iterate through each object in the array of values
-        for intIndex: Int in 0 ..< dataSource!.numberOfItems(in: self) {
+        // Check to see if we should draw a full pie chart or a placeholder pie chart
+        if (dataSource!.numberOfItems(in: self) > 0) {
+            // Iterate through each object in the array of values
+            for intIndex: Int in 0 ..< dataSource!.numberOfItems(in: self) {
+                // Calculate the percent of the pie that this slice will occupy
+                let floatPercent: CGFloat = self.calculatePercent(forItemAt: intIndex);
+                
+                // Calculate the percent of the slice that will be filled
+                let floatPercentFill: CGFloat = self.calculatePercent(forItemAt: intIndex) * dataSource!.pieChart(self, percentFillForItemAt: intIndex);
+                
+                // Calculate the end angle
+                let floatAngleEnd: CGFloat = floatAngle + ((pieType == .full ? 360 : 180) * floatPercent);
+                
+                // Calculate the end angle for the slice's fill
+                let floatAngleEndFill: CGFloat = floatAngle + ((pieType == .full ? 360 : 180) * floatPercentFill);
+                
+                // Draw the slice
+                arraySliceBounds.append(ChartCore.drawSlice(from: pointCenter,
+                                                            radius: floatRadius,
+                                                            donutRadius: floatRadius * self.settings.donutHole,
+                                                            angleStart: floatAngle,
+                                                            angleEnd: floatAngleEnd,
+                                                            borderColor: self.settings.slice.border?.color,
+                                                            borderWidth: self.settings.slice.border?.width,
+                                                            fillColor: dataSource!.pieChart(self, backgroundColorForItemAt: intIndex, selected: intIndex == intIndexSelected),
+                                                            for: pieType,
+                                                            in: view));
+                
+                // Draw the slice's fill
+                ChartCore.drawSlice(from: pointCenter,
+                                    radius: floatRadius,
+                                    donutRadius: floatRadius * self.settings.donutHole,
+                                    angleStart: floatAngle,
+                                    angleEnd: floatAngleEndFill,
+                                    borderColor: self.settings.slice.border?.color,
+                                    borderWidth: self.settings.slice.border?.width,
+                                    fillColor: dataSource!.pieChart(self, fillColorForItemAt: intIndex, selected: intIndex == intIndexSelected),
+                                    for: pieType,
+                                    in: view);
+                
+                // Update the current angle
+                floatAngle = floatAngleEnd;
+            }
+        } else {
             // Calculate the percent of the pie that this slice will occupy
-            let floatPercent: CGFloat = self.calculatePercent(forItemAt: intIndex);
-            
-            // Calculate the percent of the slice that will be filled
-            let floatPercentFill: CGFloat = self.calculatePercent(forItemAt: intIndex) * dataSource!.pieChart(self, percentFillForItemAt: intIndex);
+            let floatPercent: CGFloat = 1.0;
             
             // Calculate the end angle
             let floatAngleEnd: CGFloat = floatAngle + ((pieType == .full ? 360 : 180) * floatPercent);
-            
-            // Calculate the end angle for the slice's fill
-            let floatAngleEndFill: CGFloat = floatAngle + ((pieType == .full ? 360 : 180) * floatPercentFill);
             
             // Draw the slice
             arraySliceBounds.append(ChartCore.drawSlice(from: pointCenter,
@@ -308,24 +344,9 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
                                                         angleEnd: floatAngleEnd,
                                                         borderColor: self.settings.slice.border?.color,
                                                         borderWidth: self.settings.slice.border?.width,
-                                                        fillColor: dataSource!.pieChart(self, backgroundColorForItemAt: intIndex, selected: intIndex == intIndexSelected),
+                                                        fillColor: dataSource!.pieChart(self, backgroundColorForItemAt: 0, selected: false),
                                                         for: pieType,
                                                         in: view));
-            
-            // Draw the slice's fill
-            ChartCore.drawSlice(from: pointCenter,
-                                radius: floatRadius,
-                                donutRadius: floatRadius * self.settings.donutHole,
-                                angleStart: floatAngle,
-                                angleEnd: floatAngleEndFill,
-                                borderColor: self.settings.slice.border?.color,
-                                borderWidth: self.settings.slice.border?.width,
-                                fillColor: dataSource!.pieChart(self, fillColorForItemAt: intIndex, selected: intIndex == intIndexSelected),
-                                for: pieType,
-                                in: view);
-            
-            // Update the current angle
-            floatAngle = floatAngleEnd;
         }
         
         // Draw the tooltip
@@ -402,7 +423,8 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
                 // Check to see if the path contains the touch point
                 if (arraySliceBounds[index].path.contains(pointTouch)) {
                     // Check to see if the current index path is the same as the selected index path
-                    if (index == intIndexSelected) {
+                    // - Additionally, check to see if the data soure has data
+                    if (index == intIndexSelected || dataSource!.numberOfItems(in: self) == 0) {
                         // Reset the selected indexPath
                         intIndex = nil;
                     } else {
