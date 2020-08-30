@@ -185,9 +185,6 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         /// Properties used in configuring the grid on the y-axis
         public var gridY: ChartCore.Grid = ChartCore.Grid();
         
-        /// Properties used in configuring the axis lines on the y-axis
-        public var gridYAxis: ChartCore.Grid = ChartCore.Grid(color: .systemRed, width: 1.00);
-        
         /// The chart's initial scroll location after it has been drawn
         public var initialScrollLocation: ChartCore.ScrollLocation = .left;
         
@@ -202,6 +199,9 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         
         /// Properties used in the drawing of tooltips
         public var tooltip: ChartCore.Tooltip = ChartCore.Tooltip();
+        
+        /// Properties used in configuring the zero grid line on the y-axis
+        public var zeroGridLine: ChartCore.Grid = ChartCore.Grid(color: .opaqueSeparator, width: 1.0);
     }
     
     // MARK: - Variables
@@ -814,7 +814,7 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
         };
         
         // Check to see if the zero axis should be drawn
-        if (self.settings.gridYAxis.active) {
+        if (self.settings.zeroGridLine.active) {
             // Calculate the location of the zero axis
             let floatZeroAxis: CGFloat = ChartCore.calculateZeroAxisLocation(for: object,
                                                                              max: doubleMaxValue,
@@ -823,9 +823,9 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
             // Draw a grid line
             ChartCore.drawLine(from: CGPoint(x: .zero - (boolAdjustLeft ? self.settings.padding.left : .zero), y: floatZeroAxis),
                                to: CGPoint(x: (view?.frame.size.width ?? .zero) + (boolAdjustRight ? self.settings.padding.right : .zero), y: floatZeroAxis),
-                               color: self.settings.gridYAxis.color,
-                               style: self.settings.gridYAxis.lineStyle,
-                               width: self.settings.gridYAxis.width,
+                               color: self.settings.zeroGridLine.color,
+                               style: self.settings.zeroGridLine.lineStyle,
+                               width: self.settings.zeroGridLine.width,
                                in: view);
         }
     }
