@@ -151,6 +151,9 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
         get {
             self.intIndexSelected;
         }
+        set {
+            intIndexSelected = newValue ?? nil;
+        }
     }
     
     /// The object in which the chart will be drawn
@@ -162,7 +165,7 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
         // Check to see if the userInterfaceStyle or size class / orientation changed
         if (traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle || traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass || traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass) {
             // Draw the chart
-            self.draw(reset: false);
+            self.draw(resetSelectedIndex: false, resetTooltip: false);
         }
     }
     
@@ -182,12 +185,15 @@ public class PieChart: UIView, UIGestureRecognizerDelegate {
     // MARK: - Chart
     
     // Draws the chart
-    public func draw(reset boolReset: Bool = true) {
-        // Check to see if the state should be reset
-        if (boolReset) {
+    public func draw(resetSelectedIndex boolResetSelectedIndex: Bool = true, resetTooltip boolResetTooltip: Bool = true) {
+        // Check to see if the selected index should be reset
+        if (boolResetSelectedIndex) {
             // Reset the selected index
             intIndexSelected = nil;
-            
+        }
+        
+        // Check to see if the tooltip's location should be reset
+        if (boolResetTooltip) {
             // Reset the location of the tooltip
             rectTooltip = nil;
         }

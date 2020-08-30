@@ -185,6 +185,9 @@ public class BarChart: UIView, UICollectionViewDataSource , UICollectionViewDele
         get {
             self.indexPathSelected?.row;
         }
+        set {
+            indexPathSelected = newValue != nil ? IndexPath(row: newValue!, section: 0) : nil;
+        }
     }
     
     /// The chart's settings
@@ -202,7 +205,7 @@ public class BarChart: UIView, UICollectionViewDataSource , UICollectionViewDele
             let pointContentOffset: CGPoint? = collectionViewPrevious?.contentOffset;
 
             // Draw the chart
-            self.draw(reset: false);
+            self.draw(resetSelectedIndex: false, resetTooltip: false);
             
             // Retreive the new collection view
             let collectionViewNew: UICollectionView? = self.subviews.filter({ $0.isKind(of: UICollectionView.classForCoder()) }).first as? UICollectionView;
@@ -224,12 +227,15 @@ public class BarChart: UIView, UICollectionViewDataSource , UICollectionViewDele
     // MARK: - Chart
     
     // Draws the chart
-    public func draw(reset boolReset: Bool = true) {
-        // Check to see if the state should be reset
-        if (boolReset) {
+    public func draw(resetSelectedIndex boolResetSelectedIndex: Bool = true, resetTooltip boolResetTooltip: Bool = true) {
+        // Check to see if the selected index should be reset
+        if (boolResetSelectedIndex) {
             // Reset the selected indexPath
             indexPathSelected = nil;
-            
+        }
+        
+        // Check to see if the tooltip's location should be reset
+        if (boolResetTooltip) {
             // Reset the location of the tooltip
             rectTooltip = nil;
         }
