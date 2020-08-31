@@ -448,10 +448,17 @@ public class LineChart: UIView, UICollectionViewDataSource , UICollectionViewDel
             self.drawAxisXGrid(for: collectionView, in: collectionView.backgroundView);
         }
         
-        // Set the initial scroll location
-        collectionView.scrollToItem(at: self.settings.initialScrollLocation == .left ? IndexPath(row: 0, section: 0) : IndexPath(row: dataSource!.numberOfItems(in: self) - 1, section: 0),
-                                    at: self.settings.initialScrollLocation == .left ? .left : .right,
-                                    animated: false);
+        // Check to see if an initial selected index path was provided
+        if (indexPathSelected != nil) {
+            // Set the initial scroll location to the provided index path's location
+            collectionView.scrollToItem(at: indexPathSelected!, at: .centeredHorizontally, animated: false);
+        }
+        else {
+            // Set the initial scroll location to either the left or right side of the chart
+            collectionView.scrollToItem(at: self.settings.initialScrollLocation == .left ? IndexPath(row: 0, section: 0) : IndexPath(row: dataSource!.numberOfItems(in: self) - 1, section: 0),
+                                        at: self.settings.initialScrollLocation == .left ? .left : .right,
+                                        animated: false);
+        }
         
         // Add a gesture recognizer to the collection view
         let tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognizer_Tap(sender:)));
