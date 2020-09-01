@@ -765,6 +765,11 @@ public class ChartCore {
             return floatPointStartTooltipY - tooltipSettings.tooltipSpacing.bottom - attributedStringValue.size().height;
         }
         
+        // MARK: Prepare to draw the tooltip
+        
+        // Remove any previous tooltip instances
+        view?.layer.sublayers?.removeAll(where: { $0.name?.contains("tooltip") ?? false });
+        
         // MARK: Draw the tooltip's arrow
         
         // Create a mutable path
