@@ -1,6 +1,8 @@
 # 📊 NUCharts
 A simple, minimalistic charting framework for iOS designed to produce beautiful and highly customizable charts.
 
+### ⚠️ Please note that this project is currently in active development and is not production ready!
+
 ## Features
 - Demo included
 - Highly customizable
